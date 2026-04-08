@@ -3,9 +3,9 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.darksovereign.rpg",
+      "package_name": "app.replit.shadow_chronicle__samuelb100.twa",
       "sha256_cert_fingerprints": [
-        "REPLACE_WITH_YOUR_SHA256_CERT_FINGERPRINT"
+        "22:79:35:CF:41:C9:AC:D0:64:68:91:F8:DC:AF:B4:AB:A2:4E:F1:C1:9E:B8:02:41:13:49:DE:56:05:19:A1:88"
       ]
     }
   }
