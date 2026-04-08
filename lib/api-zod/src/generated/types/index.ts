@@ -6,4 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./errorResponse";
+export * from "./feedbackInput";
+export * from "./feedbackItem";
 export * from "./healthStatus";

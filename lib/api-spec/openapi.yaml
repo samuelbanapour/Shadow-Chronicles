@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: feedback
+    description: Playtest feedback operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,45 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /feedback:
+    post:
+      operationId: submitFeedback
+      tags: [feedback]
+      summary: Submit playtest feedback
+      description: Saves a feedback submission from a playtester
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FeedbackInput"
+      responses:
+        "201":
+          description: Feedback saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeedbackItem"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    get:
+      operationId: getFeedback
+      tags: [feedback]
+      summary: Retrieve all feedback submissions
+      description: Returns all submitted feedback for review
+      responses:
+        "200":
+          description: List of feedback submissions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FeedbackItem"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +74,57 @@ components:
           type: string
       required:
         - status
-
+    FeedbackInput:
+      type: object
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: Star rating from 1 to 5
+        chapter:
+          type: integer
+          nullable: true
+          description: Chapter number the tester is on
+        scene:
+          type: string
+          nullable: true
+          description: Current scene identifier
+        comment:
+          type: string
+          nullable: true
+          description: Free-text comment from the tester
+      required:
+        - rating
+    FeedbackItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+        chapter:
+          type: integer
+          nullable: true
+        scene:
+          type: string
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+        - id
+        - rating
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error

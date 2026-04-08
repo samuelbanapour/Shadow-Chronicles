@@ -5,9 +5,6 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
 
 export interface FeedbackInput {
   /**
@@ -22,21 +19,4 @@ export interface FeedbackInput {
   scene?: string | null;
   /** Free-text comment from the tester */
   comment?: string | null;
-}
-
-export interface FeedbackItem {
-  id: number;
-  /**
-   * @minimum 1
-   * @maximum 5
-   */
-  rating: number;
-  chapter?: number | null;
-  scene?: string | null;
-  comment?: string | null;
-  created_at?: string | null;
-}
-
-export interface ErrorResponse {
-  error: string;
 }

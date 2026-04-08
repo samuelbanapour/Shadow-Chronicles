@@ -14,3 +14,36 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Saves a feedback submission from a playtester
+ * @summary Submit playtest feedback
+ */
+export const submitFeedbackBodyRatingMax = 5;
+
+export const SubmitFeedbackBody = zod.object({
+  rating: zod
+    .number()
+    .min(1)
+    .max(submitFeedbackBodyRatingMax)
+    .describe("Star rating from 1 to 5"),
+  chapter: zod.number().nullish().describe("Chapter number the tester is on"),
+  scene: zod.string().nullish().describe("Current scene identifier"),
+  comment: zod.string().nullish().describe("Free-text comment from the tester"),
+});
+
+/**
+ * Returns all submitted feedback for review
+ * @summary Retrieve all feedback submissions
+ */
+export const getFeedbackResponseRatingMax = 5;
+
+export const GetFeedbackResponseItem = zod.object({
+  id: zod.number(),
+  rating: zod.number().min(1).max(getFeedbackResponseRatingMax),
+  chapter: zod.number().nullish(),
+  scene: zod.string().nullish(),
+  comment: zod.string().nullish(),
+  created_at: zod.coerce.date().nullish(),
+});
+export const GetFeedbackResponse = zod.array(GetFeedbackResponseItem);
