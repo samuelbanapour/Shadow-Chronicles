@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Skull, Heart, Zap, Coins, Shield, Eye, BookOpen, X, ChevronRight, AlertTriangle, Star } from 'lucide-react';
+import { Skull, Heart, Zap, Coins, Shield, Eye, BookOpen, X, ChevronRight, AlertTriangle, Star, Trophy, LogIn, LogOut } from 'lucide-react';
 import type { GameState, Choice } from '@/game/types';
 import {
   getCurrentScene,
@@ -10,6 +10,7 @@ import {
   getDarknessLabel,
   saveGame,
 } from '@/game/engine';
+import { playGames } from '@/services/playGames';
 
 interface GameScreenProps {
   state: GameState;
@@ -59,9 +60,20 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [narrativeIndex, setNarrativeIndex] = useState(0);
   const [showAllNarrative, setShowAllNarrative] = useState(false);
+  const [achToast, setAchToast] = useState<string | null>(null);
+  const [pgsSignedIn, setPgsSignedIn] = useState(false);
   const narrativeRef = useRef<HTMLDivElement>(null);
 
   const scene = getCurrentScene(state);
+
+  useEffect(() => {
+    playGames.init((name) => {
+      setAchToast(name);
+      setTimeout(() => setAchToast(null), 3500);
+    });
+    playGames.trigger('game_start');
+    setPgsSignedIn(playGames.isSignedIn());
+  }, []);
 
   useEffect(() => {
     setNarrativeIndex(0);
@@ -113,6 +125,42 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
         return;
       }
       const newState = applyChoice(state, choice);
+
+      // Chapter achievements
+      if (newState.chapter !== state.chapter) {
+        if (newState.chapter === 2) playGames.trigger('chapter_2');
+        if (newState.chapter === 3) playGames.trigger('chapter_3');
+        if (newState.chapter === 4) playGames.trigger('chapter_4');
+      }
+
+      // Corruption threshold achievements
+      const prevCorruption = state.player.stats.corruption;
+      const nextCorruption = newState.player.stats.corruption;
+      if (prevCorruption < 50 && nextCorruption >= 50) playGames.trigger('corruption_50');
+      if (prevCorruption < 80 && nextCorruption >= 80) playGames.trigger('corruption_80');
+
+      // Level achievement
+      if (newState.player.stats.level >= 5 && state.player.stats.level < 5) {
+        playGames.trigger('level_5');
+      }
+
+      // Ending achievements
+      const nextScene = newState.currentScene;
+      if (nextScene.includes('ending')) {
+        const endingMap: Record<string, string> = {
+          bad: 'ending_bad',
+          neutral: 'ending_neutral',
+          'dark-triumph': 'ending_dark_triumph',
+          'dark_triumph': 'ending_dark_triumph',
+          'true-evil': 'ending_true_evil',
+          'true_evil': 'ending_true_evil',
+          redemption: 'ending_redemption',
+        };
+        for (const [key, trigger] of Object.entries(endingMap)) {
+          if (nextScene.includes(key)) { playGames.trigger(trigger); break; }
+        }
+      }
+
       onStateChange(newState);
       setIsTransitioning(false);
     }, 600);
@@ -141,6 +189,24 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
     >
       {/* Vignette */}
       <div className="vignette" />
+
+      {/* Achievement toast */}
+      <AnimatePresence>
+        {achToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -40 }}
+            className="fixed top-4 right-4 z-[100] flex items-center gap-3 bg-black/90 border border-gold/40 rounded px-4 py-3 shadow-2xl"
+          >
+            <Trophy className="w-4 h-4 text-gold shrink-0" />
+            <div>
+              <div className="text-[0.6rem] text-gold/60 font-sans uppercase tracking-widest">Achievement Unlocked</div>
+              <div className="text-sm font-display text-gold font-bold">{achToast}</div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* LEFT: SIDEBAR - Character Stats */}
       <div className="lg:w-72 shrink-0 p-4 lg:p-5 lg:border-r border-border/30 space-y-4 relative z-10">
@@ -288,6 +354,33 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
           </div>
           <span className="text-xs text-muted-foreground/60 font-sans">{state.player.inventory.length}</span>
         </button>
+
+        {/* Play Games sign-in */}
+        {playGames.isConfigured() && (
+          <button
+            onClick={async () => {
+              if (pgsSignedIn) {
+                playGames.signOut();
+                setPgsSignedIn(false);
+              } else {
+                const ok = await playGames.signIn();
+                setPgsSignedIn(ok);
+              }
+            }}
+            className="w-full card-parchment p-3 flex items-center justify-between hover:border-muted/50 transition-colors group"
+          >
+            <div className="flex items-center gap-2">
+              <Trophy className={`w-3.5 h-3.5 ${pgsSignedIn ? 'text-gold' : 'text-muted-foreground group-hover:text-foreground'}`} />
+              <span className={`text-xs font-sans tracking-wider uppercase ${pgsSignedIn ? 'text-gold' : 'text-muted-foreground group-hover:text-foreground'}`}>
+                {pgsSignedIn ? 'Play Games' : 'Sign in'}
+              </span>
+            </div>
+            {pgsSignedIn
+              ? <LogOut className="w-3 h-3 text-muted-foreground/40" />
+              : <LogIn className="w-3 h-3 text-muted-foreground/40" />
+            }
+          </button>
+        )}
       </div>
 
       {/* RIGHT: Main game area */}

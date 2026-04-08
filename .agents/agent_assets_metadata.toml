@@ -1,10 +1,5 @@
 uploads = []
-
-[[generated]]
-id = "wCKodVFBj4nPTsg5M7fV2"
-uri = "file://screenshots/feature-graphic.png"
-type = "image"
-title = "generated_image"
+generated = []
 
 [[outputs]]
 id = "EMjo5IBPuQf5c3luZqyx_"

@@ -5,6 +5,7 @@ import CharacterCreation from '@/pages/CharacterCreation';
 import GameScreen from '@/pages/GameScreen';
 import { createInitialState, loadGame, clearSave } from '@/game/engine';
 import type { GameState } from '@/game/types';
+import { playGames } from '@/services/playGames';
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ export default function App() {
     const state = createInitialState(name, classId);
     setGameState(state);
     setView('game');
+    playGames.trigger(`class_${classId.replace('-', '_')}`);
   };
 
   const handleGameStateChange = (newState: GameState) => {
