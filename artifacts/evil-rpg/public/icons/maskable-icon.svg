@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Safe zone: inner 80% = 204px padding on each side -->
+  <!-- Full dark background for maskable icon -->
+  <rect width="512" height="512" fill="#0a0203"/>
+  <!-- Subtle background glow -->
+  <circle cx="256" cy="240" r="220" fill="#1a0505"/>
+  <!-- Crown at safe-zone center with padding -->
+  <!-- Crown base -->
+  <path d="M 120 330 L 158 220 L 256 295 L 354 220 L 392 330 Z" fill="#1c0606" stroke="#8b1a1a" stroke-width="3"/>
+  <!-- Crown points -->
+  <polygon points="256,115 233,215 279,215" fill="#6b0f0f" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="158,220 136,158 180,220" fill="#6b0f0f" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="354,220 376,158 332,220" fill="#6b0f0f" stroke="#c0392b" stroke-width="2"/>
+  <!-- Crown band -->
+  <rect x="128" y="310" width="256" height="38" rx="3" fill="#1c0606" stroke="#8b1a1a" stroke-width="2.5"/>
+  <!-- Center gem -->
+  <polygon points="256,162 241,188 256,202 271,188" fill="#c0392b" opacity="0.9"/>
+  <!-- Side gems -->
+  <circle cx="162" cy="173" r="9" fill="#8b1a1a" stroke="#c0392b" stroke-width="1.5"/>
+  <circle cx="350" cy="173" r="9" fill="#8b1a1a" stroke="#c0392b" stroke-width="1.5"/>
+  <!-- Rune text on band -->
+  <text x="256" y="335" text-anchor="middle" fill="#5a0f0f" font-size="14" font-family="serif">ᚠᚢᚦᚨᚱ</text>
+  <!-- Title -->
+  <text x="256" y="415" text-anchor="middle" fill="#c0392b" font-size="34" font-family="serif" font-weight="bold" letter-spacing="2">DARK</text>
+  <text x="256" y="455" text-anchor="middle" fill="#8b1a1a" font-size="20" font-family="serif" letter-spacing="4">SOVEREIGN</text>
+</svg>

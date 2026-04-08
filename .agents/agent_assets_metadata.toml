@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "EMjo5IBPuQf5c3luZqyx_"
+uri = "file://artifacts/evil-rpg/GOOGLE_PLAY_GUIDE.md"
+type = "text"
+title = "Google Play Store Guide — Dark Sovereign RPG"

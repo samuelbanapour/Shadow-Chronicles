@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1a0505"/>
+      <stop offset="100%" stop-color="#0a0203"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#8b1a1a" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#8b1a1a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" fill="url(#bg)" rx="80"/>
+  <!-- Glow -->
+  <circle cx="256" cy="220" r="180" fill="url(#glow)" filter="url(#blur)"/>
+  <!-- Crown base -->
+  <path d="M 100 320 L 140 200 L 256 280 L 372 200 L 412 320 Z" fill="#1c0606" stroke="#8b1a1a" stroke-width="3"/>
+  <!-- Crown points -->
+  <polygon points="256,100 230,200 282,200" fill="#6b0f0f" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="140,200 120,140 160,200" fill="#6b0f0f" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="372,200 392,140 352,200" fill="#6b0f0f" stroke="#c0392b" stroke-width="2"/>
+  <!-- Crown body -->
+  <rect x="110" y="300" width="292" height="40" rx="4" fill="#1c0606" stroke="#8b1a1a" stroke-width="2.5"/>
+  <!-- Central gem -->
+  <polygon points="256,148 241,175 256,190 271,175" fill="#c0392b" opacity="0.9"/>
+  <!-- Side gems -->
+  <circle cx="156" cy="160" r="10" fill="#8b1a1a" stroke="#c0392b" stroke-width="1.5"/>
+  <circle cx="356" cy="160" r="10" fill="#8b1a1a" stroke="#c0392b" stroke-width="1.5"/>
+  <!-- Decorative runes on crown band -->
+  <text x="256" y="328" text-anchor="middle" fill="#5a0f0f" font-size="16" font-family="serif">ᚠᚢᚦᚨᚱ</text>
+  <!-- Obsidian sheen lines -->
+  <line x1="130" y1="305" x2="130" y2="338" stroke="#c0392b" stroke-width="1" opacity="0.3"/>
+  <line x1="180" y1="305" x2="180" y2="338" stroke="#c0392b" stroke-width="1" opacity="0.3"/>
+  <line x1="230" y1="305" x2="230" y2="338" stroke="#c0392b" stroke-width="1" opacity="0.3"/>
+  <line x1="280" y1="305" x2="280" y2="338" stroke="#c0392b" stroke-width="1" opacity="0.3"/>
+  <line x1="330" y1="305" x2="330" y2="338" stroke="#c0392b" stroke-width="1" opacity="0.3"/>
+  <line x1="380" y1="305" x2="380" y2="338" stroke="#c0392b" stroke-width="1" opacity="0.3"/>
+  <!-- Title text -->
+  <text x="256" y="410" text-anchor="middle" fill="#c0392b" font-size="38" font-family="serif" font-weight="bold" letter-spacing="2">DARK</text>
+  <text x="256" y="455" text-anchor="middle" fill="#8b1a1a" font-size="24" font-family="serif" letter-spacing="4">SOVEREIGN</text>
+</svg>
