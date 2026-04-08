@@ -29,3 +29,9 @@ id = "WY-fbeZiToMT6EuDQ9r4-"
 uri = "file://screenshots/title-hd.jpg"
 type = "image"
 title = "Phone Screenshot 2 — Title Screen (HD)"
+
+[[outputs]]
+id = "coi2ZGoJe3vSyiIYEZhPM"
+uri = "file://screenshots/feature-graphic-1024x500.png"
+type = "image"
+title = "Feature Graphic — 1024x500px (ready to upload)"
