@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Skull, BookOpen, RotateCcw } from 'lucide-react';
+import { Skull, BookOpen, RotateCcw, MessageSquare } from 'lucide-react';
 import { loadGame, clearSave } from '@/game/engine';
 import type { GameState } from '@/game/types';
+import FeedbackModal from '@/components/FeedbackModal';
 
 interface TitleScreenProps {
   onNewGame: () => void;
@@ -15,6 +16,7 @@ export default function TitleScreen({ onNewGame, onContinue }: TitleScreenProps)
   const [savedGame, setSavedGame] = useState<GameState | null>(null);
   const [glyphIndex, setGlyphIndex] = useState(0);
   const [showConfirmNew, setShowConfirmNew] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   useEffect(() => {
     const saved = loadGame();
@@ -150,6 +152,17 @@ export default function TitleScreen({ onNewGame, onContinue }: TitleScreenProps)
               </span>
             </button>
           )}
+
+          <button
+            data-testid="button-feedback"
+            onClick={() => setShowFeedback(true)}
+            className="group px-8 py-2 border border-muted/20 bg-transparent hover:border-muted/50 hover:bg-muted/10 transition-all duration-300 font-sans text-xs tracking-widest uppercase text-muted-foreground/50 hover:text-muted-foreground"
+          >
+            <span className="flex items-center justify-center gap-2">
+              <MessageSquare className="w-3 h-3" />
+              Share Feedback
+            </span>
+          </button>
         </motion.div>
 
         {/* Warning */}
@@ -162,6 +175,13 @@ export default function TitleScreen({ onNewGame, onContinue }: TitleScreenProps)
           CONTAINS DARK THEMES · FOR MATURE AUDIENCES · CHOICES HAVE CONSEQUENCES
         </motion.p>
       </div>
+
+      {/* Feedback modal */}
+      <AnimatePresence>
+        {showFeedback && (
+          <FeedbackModal onClose={() => setShowFeedback(false)} />
+        )}
+      </AnimatePresence>
 
       {/* Confirm new game dialog */}
       <AnimatePresence>

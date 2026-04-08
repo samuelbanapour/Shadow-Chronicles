@@ -16,34 +16,27 @@ export const HealthCheckResponse = zod.object({
 });
 
 /**
- * Saves a feedback submission from a playtester
- * @summary Submit playtest feedback
+ * Save feedback from a game playtester
+ * @summary Submit playtester feedback
  */
-export const submitFeedbackBodyRatingMax = 5;
 
 export const SubmitFeedbackBody = zod.object({
-  rating: zod
-    .number()
-    .min(1)
-    .max(submitFeedbackBodyRatingMax)
-    .describe("Star rating from 1 to 5"),
-  chapter: zod.number().nullish().describe("Chapter number the tester is on"),
-  scene: zod.string().nullish().describe("Current scene identifier"),
-  comment: zod.string().nullish().describe("Free-text comment from the tester"),
+  playerName: zod.string().nullish(),
+  playerClass: zod.string().nullish(),
+  rating: zod.enum(["terrible", "bad", "okay", "good", "amazing"]),
+  message: zod.string().min(1),
 });
 
 /**
- * Returns all submitted feedback for review
- * @summary Retrieve all feedback submissions
+ * Retrieve all submitted feedback entries
+ * @summary List playtester feedback
  */
-export const getFeedbackResponseRatingMax = 5;
-
-export const GetFeedbackResponseItem = zod.object({
+export const ListFeedbackResponseItem = zod.object({
   id: zod.number(),
-  rating: zod.number().min(1).max(getFeedbackResponseRatingMax),
-  chapter: zod.number().nullish(),
-  scene: zod.string().nullish(),
-  comment: zod.string().nullish(),
-  created_at: zod.coerce.date().nullish(),
+  playerName: zod.string().nullish(),
+  playerClass: zod.string().nullish(),
+  rating: zod.string(),
+  message: zod.string(),
+  createdAt: zod.coerce.date(),
 });
-export const GetFeedbackResponse = zod.array(GetFeedbackResponseItem);
+export const ListFeedbackResponse = zod.array(ListFeedbackResponseItem);

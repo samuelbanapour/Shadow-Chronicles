@@ -54,3 +54,19 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
 ### API Server (`artifacts/api-server`)
 - **Type**: Express 5 API server
 - **Preview path**: `/api`
+- **Endpoints**:
+  - `GET /api/healthz` — health check
+  - `POST /api/feedback` — save playtester feedback (rating + message) to PostgreSQL
+- **Database**: Uses `@workspace/db` with `feedbackTable` schema
+
+## Feedback System
+- **DB Table**: `feedback` (id, player_name, player_class, rating, message, created_at)
+- **API**: `POST /api/feedback` accepts `{ rating, message, playerName?, playerClass? }`
+- **Frontend**: `FeedbackModal` component in `artifacts/evil-rpg/src/components/FeedbackModal.tsx`
+- **Access**: "Share Feedback" button on TitleScreen
+
+## Deployment
+Both artifacts are production-ready:
+- **API server**: Builds with esbuild, runs with Node.js in production (autoscale target)
+- **Game frontend**: Builds as static files, served statically in production
+- User must click Publish button in the main Replit UI to deploy

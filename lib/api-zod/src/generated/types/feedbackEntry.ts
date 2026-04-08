@@ -5,12 +5,12 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import type { FeedbackInputRating } from "./feedbackInputRating";
 
-export interface FeedbackInput {
+export interface FeedbackEntry {
+  id: number;
   playerName?: string | null;
   playerClass?: string | null;
-  rating: FeedbackInputRating;
-  /** @minLength 1 */
+  rating: string;
   message: string;
+  createdAt: Date;
 }

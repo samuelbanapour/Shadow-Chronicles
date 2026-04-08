@@ -11,7 +11,7 @@ tags:
   - name: health
     description: Health operations
   - name: feedback
-    description: Playtest feedback operations
+    description: Feedback operations
 paths:
   /healthz:
     get:
@@ -30,8 +30,8 @@ paths:
     post:
       operationId: submitFeedback
       tags: [feedback]
-      summary: Submit playtest feedback
-      description: Saves a feedback submission from a playtester
+      summary: Submit playtester feedback
+      description: Save feedback from a game playtester
       requestBody:
         required: true
         content:
@@ -44,7 +44,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FeedbackItem"
+                $ref: "#/components/schemas/FeedbackResponse"
         "400":
           description: Invalid input
           content:
@@ -52,19 +52,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
     get:
-      operationId: getFeedback
+      operationId: listFeedback
       tags: [feedback]
-      summary: Retrieve all feedback submissions
-      description: Returns all submitted feedback for review
+      summary: List playtester feedback
+      description: Retrieve all submitted feedback entries
       responses:
         "200":
-          description: List of feedback submissions
+          description: List of feedback entries
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/FeedbackItem"
+                  $ref: "#/components/schemas/FeedbackEntry"
 components:
   schemas:
     HealthStatus:
@@ -77,50 +77,54 @@ components:
     FeedbackInput:
       type: object
       properties:
+        playerName:
+          type: string
+          nullable: true
+        playerClass:
+          type: string
+          nullable: true
         rating:
-          type: integer
-          minimum: 1
-          maximum: 5
-          description: Star rating from 1 to 5
-        chapter:
-          type: integer
-          nullable: true
-          description: Chapter number the tester is on
-        scene:
           type: string
-          nullable: true
-          description: Current scene identifier
-        comment:
+          enum: [terrible, bad, okay, good, amazing]
+        message:
           type: string
-          nullable: true
-          description: Free-text comment from the tester
+          minLength: 1
       required:
         - rating
-    FeedbackItem:
+        - message
+    FeedbackResponse:
       type: object
       properties:
         id:
           type: integer
+        message:
+          type: string
+      required:
+        - id
+        - message
+    FeedbackEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+        playerName:
+          type: string
+          nullable: true
+        playerClass:
+          type: string
+          nullable: true
         rating:
-          type: integer
-          minimum: 1
-          maximum: 5
-        chapter:
-          type: integer
-          nullable: true
-        scene:
           type: string
-          nullable: true
-        comment:
+        message:
           type: string
-          nullable: true
-        created_at:
+        createdAt:
           type: string
           format: date-time
-          nullable: true
       required:
         - id
         - rating
+        - message
+        - createdAt
     ErrorResponse:
       type: object
       properties:

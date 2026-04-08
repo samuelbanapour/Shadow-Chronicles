@@ -1,19 +1,28 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, X, Send, CheckCircle } from 'lucide-react';
+import { X, Send, CheckCircle } from 'lucide-react';
 import { useSubmitFeedback } from '@workspace/api-client-react';
 
 interface FeedbackModalProps {
   open: boolean;
   onClose: () => void;
-  chapter?: number;
-  scene?: string;
+  playerName?: string;
+  playerClass?: string;
 }
 
-export default function FeedbackModal({ open, onClose, chapter, scene }: FeedbackModalProps) {
-  const [rating, setRating] = useState(0);
-  const [hoveredRating, setHoveredRating] = useState(0);
-  const [comment, setComment] = useState('');
+const RATINGS = [
+  { value: 'terrible', label: 'Terrible', emoji: '💀' },
+  { value: 'bad', label: 'Bad', emoji: '😞' },
+  { value: 'okay', label: 'Okay', emoji: '😐' },
+  { value: 'good', label: 'Good', emoji: '😊' },
+  { value: 'amazing', label: 'Amazing', emoji: '🔥' },
+] as const;
+
+type Rating = typeof RATINGS[number]['value'];
+
+export default function FeedbackModal({ open, onClose, playerName, playerClass }: FeedbackModalProps) {
+  const [rating, setRating] = useState<Rating | null>(null);
+  const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const { mutate: submitFeedback, isPending } = useSubmitFeedback({
@@ -22,32 +31,29 @@ export default function FeedbackModal({ open, onClose, chapter, scene }: Feedbac
         setSubmitted(true);
         setTimeout(() => {
           handleClose();
-        }, 2000);
+        }, 2500);
       },
     },
   });
 
   const handleClose = () => {
-    setRating(0);
-    setHoveredRating(0);
-    setComment('');
+    setRating(null);
+    setMessage('');
     setSubmitted(false);
     onClose();
   };
 
   const handleSubmit = () => {
-    if (rating === 0) return;
+    if (!rating || !message.trim()) return;
     submitFeedback({
       data: {
         rating,
-        chapter: chapter ?? null,
-        scene: scene ?? null,
-        comment: comment.trim() || null,
+        message: message.trim(),
+        playerName: playerName ?? null,
+        playerClass: playerClass ?? null,
       },
     });
   };
-
-  const displayRating = hoveredRating || rating;
 
   return (
     <AnimatePresence>
@@ -84,10 +90,10 @@ export default function FeedbackModal({ open, onClose, chapter, scene }: Feedbac
                   animate={{ opacity: 1, y: 0 }}
                   className="flex flex-col items-center gap-3 py-6 text-center"
                 >
-                  <CheckCircle className="w-10 h-10 text-blood" />
-                  <div className="font-display text-lg text-foreground">Feedback Received</div>
+                  <CheckCircle className="w-10 h-10 text-gold" />
+                  <div className="font-display text-lg text-foreground">Your words are heard.</div>
                   <p className="font-lore italic text-sm text-muted-foreground">
-                    Your words shall be heard, dark sovereign.
+                    The Dark Council thanks you for your wisdom, dark sovereign.
                   </p>
                 </motion.div>
               ) : (
@@ -95,80 +101,61 @@ export default function FeedbackModal({ open, onClose, chapter, scene }: Feedbac
                   <div className="space-y-1">
                     <h2 className="font-display text-xl font-bold text-foreground tracking-wide">Playtester Feedback</h2>
                     <div className="rune-divider text-[0.5rem]">ᚠᛖᛖᛞᛒᚨᚲᚲ</div>
-                    {(chapter || scene) && (
-                      <div className="text-[0.6rem] text-muted-foreground/50 font-sans uppercase tracking-widest pt-1">
-                        {chapter && `Chapter ${chapter}`}{chapter && scene && ' · '}{scene}
-                      </div>
-                    )}
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[0.6rem] tracking-[0.3em] text-muted-foreground/60 font-sans uppercase">
-                      Rating
-                    </label>
-                    <div
-                      className="flex gap-1"
-                      onMouseLeave={() => setHoveredRating(0)}
-                      data-testid="feedback-star-row"
-                    >
-                      {[1, 2, 3, 4, 5].map((star) => (
+                    <div className="text-[0.6rem] tracking-[0.3em] text-muted-foreground/50 font-sans uppercase">
+                      How would you rate the experience?
+                    </div>
+                    <div className="flex gap-2 flex-wrap">
+                      {RATINGS.map(r => (
                         <button
-                          key={star}
-                          data-testid={`feedback-star-${star}`}
-                          onClick={() => setRating(star)}
-                          onMouseEnter={() => setHoveredRating(star)}
-                          className="transition-transform hover:scale-110"
+                          key={r.value}
+                          data-testid={`rating-${r.value}`}
+                          onClick={() => setRating(r.value)}
+                          className={`flex-1 min-w-[4rem] py-2 px-2 border text-center transition-all text-xs font-sans rounded-sm ${
+                            rating === r.value
+                              ? 'border-accent bg-accent/20 text-foreground'
+                              : 'border-border/30 bg-card/40 text-muted-foreground hover:border-muted/50'
+                          }`}
                         >
-                          <Star
-                            className={`w-7 h-7 transition-colors ${
-                              star <= displayRating
-                                ? 'fill-blood text-blood'
-                                : 'text-muted-foreground/30'
-                            }`}
-                          />
+                          <div className="text-lg leading-none mb-0.5">{r.emoji}</div>
+                          <div>{r.label}</div>
                         </button>
                       ))}
                     </div>
-                    {rating === 0 && (
-                      <p className="text-[0.6rem] text-blood/50 font-sans">Select a rating to continue</p>
-                    )}
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-[0.6rem] tracking-[0.3em] text-muted-foreground/60 font-sans uppercase">
-                      Comments <span className="text-muted-foreground/30">(optional)</span>
-                    </label>
+                    <div className="text-[0.6rem] tracking-[0.3em] text-muted-foreground/50 font-sans uppercase">
+                      Your thoughts
+                    </div>
                     <textarea
-                      data-testid="feedback-comment"
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      placeholder="Share your thoughts, dark one..."
+                      data-testid="feedback-message"
+                      value={message}
+                      onChange={e => setMessage(e.target.value)}
+                      placeholder="What did you enjoy? What would you change? Any bugs?"
                       rows={4}
-                      className="w-full bg-black/30 border border-border/40 text-foreground font-lore text-sm placeholder:text-muted-foreground/30 p-3 resize-none focus:outline-none focus:border-blood/40 transition-colors"
+                      className="w-full bg-background/50 border border-border/30 text-foreground placeholder-muted-foreground/40 text-sm font-lore p-3 resize-none focus:outline-none focus:border-accent/50 transition-colors"
                     />
                   </div>
 
                   <button
-                    data-testid="feedback-submit"
+                    data-testid="button-submit-feedback"
                     onClick={handleSubmit}
-                    disabled={rating === 0 || isPending}
-                    className={`w-full py-3 border flex items-center justify-center gap-2 font-sans text-sm tracking-widest uppercase transition-all ${
-                      rating > 0
-                        ? 'border-blood/50 bg-blood/10 hover:bg-blood/20 text-blood cursor-pointer'
-                        : 'border-muted/20 bg-muted/5 text-muted-foreground/30 cursor-not-allowed'
+                    disabled={!rating || !message.trim() || isPending}
+                    className={`w-full py-3 border flex items-center justify-center gap-2 font-sans text-xs tracking-widest uppercase transition-all ${
+                      !rating || !message.trim() || isPending
+                        ? 'border-muted/20 bg-muted/5 text-muted-foreground/30 cursor-not-allowed'
+                        : 'border-accent/50 bg-accent/10 hover:bg-accent/20 text-accent cursor-pointer'
                     }`}
                   >
                     {isPending ? (
-                      <motion.span
-                        animate={{ opacity: [1, 0.5, 1] }}
-                        transition={{ duration: 1, repeat: Infinity }}
-                      >
-                        Submitting...
-                      </motion.span>
+                      <span>Sending...</span>
                     ) : (
                       <>
-                        <Send className="w-3.5 h-3.5" />
-                        Submit Feedback
+                        <Send className="w-3 h-3" />
+                        <span>Send Feedback</span>
                       </>
                     )}
                   </button>

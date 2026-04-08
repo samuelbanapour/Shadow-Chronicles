@@ -1,21 +1,20 @@
-import { pgTable, serial, integer, text, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod/v4";
 
 export const feedbackTable = pgTable("feedback", {
   id: serial("id").primaryKey(),
-  rating: integer("rating").notNull(),
-  chapter: integer("chapter"),
-  scene: text("scene"),
-  comment: text("comment"),
-  created_at: timestamp("created_at").defaultNow(),
+  playerName: text("player_name"),
+  playerClass: text("player_class"),
+  rating: text("rating").notNull(),
+  message: text("message").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const insertFeedbackSchema = createInsertSchema(feedbackTable)
-  .omit({ id: true, created_at: true })
-  .extend({
-    rating: z.number().int().min(1).max(5),
-  });
+export const insertFeedbackSchema = createInsertSchema(feedbackTable).omit({
+  id: true,
+  createdAt: true,
+});
 
 export type InsertFeedback = z.infer<typeof insertFeedbackSchema>;
 export type Feedback = typeof feedbackTable.$inferSelect;

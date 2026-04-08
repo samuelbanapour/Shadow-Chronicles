@@ -18,8 +18,9 @@ import type {
 
 import type {
   ErrorResponse,
+  FeedbackEntry,
   FeedbackInput,
-  FeedbackItem,
+  FeedbackResponse,
   HealthStatus,
 } from "./api.schemas";
 
@@ -109,8 +110,8 @@ export function useHealthCheck<
 }
 
 /**
- * Saves a feedback submission from a playtester
- * @summary Submit playtest feedback
+ * Save feedback from a game playtester
+ * @summary Submit playtester feedback
  */
 export const getSubmitFeedbackUrl = () => {
   return `/api/feedback`;
@@ -119,8 +120,8 @@ export const getSubmitFeedbackUrl = () => {
 export const submitFeedback = async (
   feedbackInput: FeedbackInput,
   options?: RequestInit,
-): Promise<FeedbackItem> => {
-  return customFetch<FeedbackItem>(getSubmitFeedbackUrl(), {
+): Promise<FeedbackResponse> => {
+  return customFetch<FeedbackResponse>(getSubmitFeedbackUrl(), {
     ...options,
     method: "POST",
     headers: { "Content-Type": "application/json", ...options?.headers },
@@ -173,7 +174,7 @@ export type SubmitFeedbackMutationBody = BodyType<FeedbackInput>;
 export type SubmitFeedbackMutationError = ErrorType<ErrorResponse>;
 
 /**
- * @summary Submit playtest feedback
+ * @summary Submit playtester feedback
  */
 export const useSubmitFeedback = <
   TError = ErrorType<ErrorResponse>,
@@ -196,32 +197,32 @@ export const useSubmitFeedback = <
 };
 
 /**
- * Returns all submitted feedback for review
- * @summary Retrieve all feedback submissions
+ * Retrieve all submitted feedback entries
+ * @summary List playtester feedback
  */
-export const getGetFeedbackUrl = () => {
+export const getListFeedbackUrl = () => {
   return `/api/feedback`;
 };
 
-export const getFeedback = async (
+export const listFeedback = async (
   options?: RequestInit,
-): Promise<FeedbackItem[]> => {
-  return customFetch<FeedbackItem[]>(getGetFeedbackUrl(), {
+): Promise<FeedbackEntry[]> => {
+  return customFetch<FeedbackEntry[]>(getListFeedbackUrl(), {
     ...options,
     method: "GET",
   });
 };
 
-export const getGetFeedbackQueryKey = () => {
+export const getListFeedbackQueryKey = () => {
   return [`/api/feedback`] as const;
 };
 
-export const getGetFeedbackQueryOptions = <
-  TData = Awaited<ReturnType<typeof getFeedback>>,
+export const getListFeedbackQueryOptions = <
+  TData = Awaited<ReturnType<typeof listFeedback>>,
   TError = ErrorType<unknown>,
 >(options?: {
   query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getFeedback>>,
+    Awaited<ReturnType<typeof listFeedback>>,
     TError,
     TData
   >;
@@ -229,40 +230,40 @@ export const getGetFeedbackQueryOptions = <
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetFeedbackQueryKey();
+  const queryKey = queryOptions?.queryKey ?? getListFeedbackQueryKey();
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getFeedback>>> = ({
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listFeedback>>> = ({
     signal,
-  }) => getFeedback({ signal, ...requestOptions });
+  }) => listFeedback({ signal, ...requestOptions });
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getFeedback>>,
+    Awaited<ReturnType<typeof listFeedback>>,
     TError,
     TData
   > & { queryKey: QueryKey };
 };
 
-export type GetFeedbackQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getFeedback>>
+export type ListFeedbackQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listFeedback>>
 >;
-export type GetFeedbackQueryError = ErrorType<unknown>;
+export type ListFeedbackQueryError = ErrorType<unknown>;
 
 /**
- * @summary Retrieve all feedback submissions
+ * @summary List playtester feedback
  */
 
-export function useGetFeedback<
-  TData = Awaited<ReturnType<typeof getFeedback>>,
+export function useListFeedback<
+  TData = Awaited<ReturnType<typeof listFeedback>>,
   TError = ErrorType<unknown>,
 >(options?: {
   query?: UseQueryOptions<
-    Awaited<ReturnType<typeof getFeedback>>,
+    Awaited<ReturnType<typeof listFeedback>>,
     TError,
     TData
   >;
   request?: SecondParameter<typeof customFetch>;
 }): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getGetFeedbackQueryOptions(options);
+  const queryOptions = getListFeedbackQueryOptions(options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;

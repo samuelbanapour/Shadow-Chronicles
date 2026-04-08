@@ -7,6 +7,8 @@
  */
 
 export * from "./errorResponse";
+export * from "./feedbackEntry";
 export * from "./feedbackInput";
-export * from "./feedbackItem";
+export * from "./feedbackInputRating";
+export * from "./feedbackResponse";
 export * from "./healthStatus";

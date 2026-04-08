@@ -9,32 +9,37 @@ export interface HealthStatus {
   status: string;
 }
 
+export type FeedbackInputRating =
+  (typeof FeedbackInputRating)[keyof typeof FeedbackInputRating];
+
+export const FeedbackInputRating = {
+  terrible: "terrible",
+  bad: "bad",
+  okay: "okay",
+  good: "good",
+  amazing: "amazing",
+} as const;
+
 export interface FeedbackInput {
-  /**
-   * Star rating from 1 to 5
-   * @minimum 1
-   * @maximum 5
-   */
-  rating: number;
-  /** Chapter number the tester is on */
-  chapter?: number | null;
-  /** Current scene identifier */
-  scene?: string | null;
-  /** Free-text comment from the tester */
-  comment?: string | null;
+  playerName?: string | null;
+  playerClass?: string | null;
+  rating: FeedbackInputRating;
+  /** @minLength 1 */
+  message: string;
 }
 
-export interface FeedbackItem {
+export interface FeedbackResponse {
   id: number;
-  /**
-   * @minimum 1
-   * @maximum 5
-   */
-  rating: number;
-  chapter?: number | null;
-  scene?: string | null;
-  comment?: string | null;
-  created_at?: string | null;
+  message: string;
+}
+
+export interface FeedbackEntry {
+  id: number;
+  playerName?: string | null;
+  playerClass?: string | null;
+  rating: string;
+  message: string;
+  createdAt: string;
 }
 
 export interface ErrorResponse {
