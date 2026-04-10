@@ -46,6 +46,11 @@ export function createInitialState(
 }
 
 export function applyChoice(state: GameState, choice: Choice): GameState {
+  const lockStatus = isChoiceLocked(choice, state.player.stats, state.player.class, state.player.betrayals);
+  if (lockStatus.locked) {
+    return state;
+  }
+
   const newState = JSON.parse(JSON.stringify(state)) as GameState;
 
   if (choice.statChanges) {
@@ -82,15 +87,19 @@ export function applyChoice(state: GameState, choice: Choice): GameState {
 
   const changes = choice.statChanges;
   if (changes) {
-    if (typeof (changes as Record<string, unknown>)['killCount'] === 'number') {
-      newState.player.killCount += (changes as Record<string, unknown>)['killCount'] as number;
+    if (changes.killCount !== undefined) {
+      newState.player.killCount += changes.killCount;
     }
-    if (typeof (changes as Record<string, unknown>)['soulsConsumed'] === 'number') {
-      newState.player.soulsConsumed += (changes as Record<string, unknown>)['soulsConsumed'] as number;
+    if (changes.soulsConsumed !== undefined) {
+      newState.player.soulsConsumed += changes.soulsConsumed;
     }
-    if (typeof (changes as Record<string, unknown>)['betrayals'] === 'number') {
-      newState.player.betrayals += (changes as Record<string, unknown>)['betrayals'] as number;
+    if (changes.betrayals !== undefined) {
+      newState.player.betrayals += changes.betrayals;
     }
+  }
+
+  if (choice.goldCost !== undefined) {
+    newState.player.stats.gold = Math.max(0, newState.player.stats.gold - choice.goldCost);
   }
 
   newState.player.choiceHistory.push(choice.id);
@@ -113,7 +122,24 @@ export function getCurrentScene(state: GameState): Scene | null {
   return SCENES[state.currentScene] ?? null;
 }
 
-export function isChoiceLocked(choice: Choice, stats: PlayerStats): { locked: boolean; reason?: string } {
+export function isChoiceLocked(
+  choice: Choice,
+  stats: PlayerStats,
+  playerClass?: string,
+  betrayals?: number
+): { locked: boolean; reason?: string } {
+  if (choice.classBonus && playerClass && !choice.classBonus.includes(playerClass as 'shadowblade' | 'necromancer' | 'warlord' | 'plague-doctor')) {
+    return { locked: true, reason: `${choice.classBonus.map(c => c.replace('-', ' ')).join('/')} only` };
+  }
+
+  if (choice.minBetrayals !== undefined && (betrayals ?? 0) < choice.minBetrayals) {
+    return { locked: true, reason: `Requires reputation (${choice.minBetrayals}+ betrayals)` };
+  }
+
+  if (choice.goldCost !== undefined && stats.gold < choice.goldCost) {
+    return { locked: true, reason: `Requires ${choice.goldCost} gold (yours: ${stats.gold})` };
+  }
+
   if (!choice.requires) return { locked: false };
 
   for (const [key, value] of Object.entries(choice.requires)) {
@@ -145,6 +171,17 @@ export function getDarknessLabel(darkness: number): string {
   if (darkness >= 15) return 'Dark Practitioner';
   if (darkness >= 5) return 'Shadow-Touched';
   return 'Untainted';
+}
+
+export function getReputationLabel(betrayals: number): string | null {
+  if (betrayals >= 5) return 'Legendary Betrayer';
+  if (betrayals >= 3) return 'Notorious Betrayer';
+  if (betrayals >= 1) return 'Untrustworthy';
+  return null;
+}
+
+export function checkCorruptionDeath(state: GameState): boolean {
+  return state.player.stats.corruption >= 100;
 }
 
 export function saveGame(state: GameState): void {

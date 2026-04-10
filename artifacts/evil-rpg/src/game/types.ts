@@ -49,18 +49,27 @@ export interface Enemy {
   weakness?: string;
 }
 
+export type StatChanges = Partial<PlayerStats> & {
+  killCount?: number;
+  soulsConsumed?: number;
+  betrayals?: number;
+};
+
 export interface Choice {
   id: string;
   text: string;
   consequence?: string;
   nextScene: string;
   requires?: Partial<PlayerStats>;
-  statChanges?: Partial<PlayerStats>;
+  statChanges?: StatChanges;
   items?: Item[];
   morality: 'evil' | 'dark' | 'neutral' | 'grey';
   locked?: boolean;
   lockedReason?: string;
   combat?: Enemy;
+  goldCost?: number;
+  classBonus?: ('shadowblade' | 'necromancer' | 'warlord' | 'plague-doctor')[];
+  minBetrayals?: number;
 }
 
 export interface Scene {
@@ -72,7 +81,7 @@ export interface Scene {
   backgroundMood: 'tomb' | 'throne' | 'forest' | 'village' | 'dungeon' | 'ritual' | 'battlefield' | 'tower' | 'abyss';
   ambientSound?: string;
   isEnding?: boolean;
-  endingType?: 'bad' | 'neutral' | 'dark-triumph' | 'true-evil' | 'redemption';
+  endingType?: 'bad' | 'neutral' | 'dark-triumph' | 'true-evil' | 'redemption' | 'death';
   enemy?: Enemy;
 }
 

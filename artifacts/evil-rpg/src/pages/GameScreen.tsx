@@ -8,6 +8,8 @@ import {
   isChoiceLocked,
   getCorruptionLabel,
   getDarknessLabel,
+  getReputationLabel,
+  checkCorruptionDeath,
   saveGame,
 } from '@/game/engine';
 import { playGames } from '@/services/playGames';
@@ -52,6 +54,7 @@ const ENDING_TYPE_LABELS: Record<string, { label: string; color: string; descrip
   'dark-triumph': { label: 'Dark Triumph', color: 'text-blood', description: 'Power, at every cost.' },
   'true-evil': { label: 'True Evil Ending', color: 'text-blood', description: 'Beyond redemption. Beyond regret.' },
   'redemption': { label: 'Hidden Redemption', color: 'text-gold', description: 'The rarest ending. Found by those who looked.' },
+  'death': { label: 'Death', color: 'text-red-500', description: 'Your story ends here. The darkness claimed its own.' },
 };
 
 export default function GameScreen({ state, onStateChange, onGameEnd, onRestart }: GameScreenProps) {
@@ -121,6 +124,7 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
     } else if (narrativeIndex >= (scene?.narrative.length ?? 1) - 1) {
       setShowAllNarrative(true);
     }
+    return undefined;
   }, [narrativeIndex, scene, showAllNarrative]);
 
   useEffect(() => {
@@ -136,7 +140,7 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
   }
 
   const handleChoiceClick = (choice: Choice) => {
-    const lockStatus = isChoiceLocked(choice, state.player.stats);
+    const lockStatus = isChoiceLocked(choice, state.player.stats, state.player.class, state.player.betrayals);
     if (lockStatus.locked) return;
 
     audioService.playSfx('choice');
@@ -164,6 +168,11 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
         return;
       }
       const newState = applyChoice(state, choice);
+
+      if (checkCorruptionDeath(newState)) {
+        newState.currentScene = 'ending-void-consumption';
+        newState.chapter = 4;
+      }
 
       // Chapter achievements
       if (newState.chapter !== state.chapter) {
@@ -378,6 +387,11 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
                 <span className="text-[0.65rem] font-bold text-accent font-sans">{state.player.betrayals}</span>
               </div>
             )}
+            {getReputationLabel(state.player.betrayals) && (
+              <div className="mt-1 text-[0.6rem] font-bold text-red-400 font-sans tracking-wider uppercase border-t border-blood/20 pt-1.5">
+                {getReputationLabel(state.player.betrayals)}
+              </div>
+            )}
           </div>
         )}
 
@@ -534,7 +548,7 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
             )}
 
             {scene.choices.map((choice, idx) => {
-              const lockStatus = isChoiceLocked(choice, state.player.stats);
+              const lockStatus = isChoiceLocked(choice, state.player.stats, state.player.class, state.player.betrayals);
               return (
                 <motion.button
                   key={choice.id}
@@ -564,6 +578,16 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
                           <span className="text-[0.6rem] text-muted-foreground/50 font-sans italic flex items-center gap-1">
                             <AlertTriangle className="w-2.5 h-2.5" />
                             {lockStatus.reason}
+                          </span>
+                        )}
+                        {choice.goldCost !== undefined && (
+                          <span className="text-[0.6rem] text-accent font-sans font-bold flex items-center gap-0.5">
+                            <Coins className="w-2.5 h-2.5" />{choice.goldCost}g
+                          </span>
+                        )}
+                        {choice.classBonus && (
+                          <span className="text-[0.6rem] text-blue-400/60 font-sans italic">
+                            [{choice.classBonus.map(c => c.replace('-', ' ')).join('/')}]
                           </span>
                         )}
                         {choice.statChanges && !lockStatus.locked && (

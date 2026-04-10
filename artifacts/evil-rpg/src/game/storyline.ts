@@ -91,6 +91,33 @@ export const SCENES: Record<string, Scene> = {
         morality: 'grey',
         statChanges: { cunning: 2 },
         consequence: 'The Shade whispers: "There is another way. The old Inquisitor\'s crypt. But it is... guarded."'
+      },
+      {
+        id: 'ch1-bribe-elder',
+        text: 'Press a heavy purse into Maren\'s hands. "Look the other way for one night. Your people need never know."',
+        nextScene: 'ch1-seal-broken',
+        morality: 'dark',
+        goldCost: 40,
+        statChanges: { cunning: 3, corruption: 7, killCount: 3 },
+        consequence: 'Gold speaks louder than prayer. Maren pockets the purse and turns away. Three volunteers "disappear" before morning. The seal breaks quietly.'
+      },
+      {
+        id: 'ch1-str-intimidate',
+        text: 'Seize Maren by the collar and lift her off her feet with one hand. "Move. Or be moved."',
+        nextScene: 'ch1-slaughter-path',
+        morality: 'evil',
+        requires: { strength: 20 },
+        statChanges: { strength: 3, darkness: 4, corruption: 12, killCount: 10 },
+        consequence: 'Maren\'s feet dangle. The village scatters. Only the brave stay — and the brave die first.'
+      },
+      {
+        id: 'ch1-cun-poison',
+        text: 'Examine the well. With the right preparation, the ritual can be done through the water supply.',
+        nextScene: 'ch1-seal-broken',
+        morality: 'evil',
+        requires: { cunning: 20 },
+        statChanges: { cunning: 4, corruption: 12, darkness: 3, killCount: 15 },
+        consequence: 'No screaming. No combat. Just a quiet morning where fifteen people don\'t wake. The seal breaks like glass.'
       }
     ]
   },
@@ -267,6 +294,24 @@ export const SCENES: Record<string, Scene> = {
         morality: 'grey',
         statChanges: { cunning: 3, darkness: 1 },
         consequence: '"What could you offer the dead?" And then you tell it. Its visor tilts. It listens.'
+      },
+      {
+        id: 'ch1-as-bribe',
+        text: 'Scatter gold coins across the crypt floor. "Even the dead remember what wealth meant."',
+        nextScene: 'ch1-seal-broken',
+        morality: 'dark',
+        goldCost: 30,
+        statChanges: { cunning: 2, corruption: 4 },
+        consequence: 'The knight watches the coins roll. "We... cannot use these," it says. But the ward-magic reads your offering as tribute. The wards shimmer and fade.'
+      },
+      {
+        id: 'ch1-as-str-shatter',
+        text: 'Drive your fist into the ward-stone itself. Raw strength against ancient magic.',
+        nextScene: 'ch1-crypt-battle',
+        morality: 'evil',
+        requires: { strength: 20 },
+        statChanges: { strength: 4, health: -15, darkness: 3 },
+        consequence: 'The ward cracks. The knights stagger. You didn\'t negotiate — you made the crypt itself flinch.'
       }
     ]
   },
@@ -460,6 +505,32 @@ export const SCENES: Record<string, Scene> = {
         nextScene: 'ch2-capital-approach',
         morality: 'grey',
         consequence: '"Wait—" He follows. At a distance. He keeps following. He is either very brave or very stupid.'
+      },
+      {
+        id: 'ch2-cr-cun-read',
+        text: 'Study his scars, his posture, his missing fingers. You can read a man\'s entire history from his body.',
+        nextScene: 'ch2-marcus-intro',
+        morality: 'grey',
+        requires: { cunning: 20 },
+        statChanges: { cunning: 4 },
+        consequence: 'His scars are precise — torture, not combat. Missing fingers: standard Inquisition punishment. He was interrogated and escaped. He is exactly what he claims.'
+      },
+      {
+        id: 'ch2-cr-str-disarm',
+        text: 'Close the distance in one step and pin him to the ground. Check for weapons, then talk.',
+        nextScene: 'ch2-marcus-intro',
+        morality: 'dark',
+        requires: { strength: 20 },
+        statChanges: { strength: 2, cunning: 1 },
+        consequence: 'He carries three knives and a garrote. Professional. After you let him up, he\'s more forthcoming than he intended.'
+      },
+      {
+        id: 'ch2-cr-shop',
+        text: 'Examine the contraband spread around his camp. Some of these items are... interesting.',
+        nextScene: 'black-market',
+        morality: 'neutral',
+        statChanges: { cunning: 1 },
+        consequence: 'Among the supplies: dark artifacts, contraband weapons, and things that should not exist outside locked vaults.'
       }
     ]
   },
@@ -773,10 +844,18 @@ export const SCENES: Record<string, Scene> = {
       {
         id: 'ch2-s2b-proceed',
         text: 'The Pale Court. The Abyss. The Crown. Forward.',
-        nextScene: 'ch3-pale-court',
+        nextScene: 'ch3-abyss-descent',
         morality: 'evil',
         statChanges: { corruption: 5, experience: 300 },
         consequence: 'The Shade leads the way. In the dead king\'s throne room, you feel a strange thing: anticipation.'
+      },
+      {
+        id: 'ch2-s2b-stronghold',
+        text: 'Search for any advantage before entering the Abyss. Someone must have tried this before.',
+        nextScene: 'ch3-stronghold',
+        morality: 'grey',
+        statChanges: { cunning: 2, experience: 200 },
+        consequence: 'The Shade tilts its head. "There was one. Long ago. They left traces. If you can find them."'
       }
     ]
   },
@@ -798,10 +877,18 @@ export const SCENES: Record<string, Scene> = {
       {
         id: 'ch2-s2bd-proceed',
         text: 'The Third Seal awaits. March into the Pale Court\'s domain.',
-        nextScene: 'ch3-pale-court',
+        nextScene: 'ch3-abyss-descent',
         morality: 'evil',
         statChanges: { darkness: 3, experience: 280 },
         consequence: 'Forward. Always forward. This is the only direction you know anymore.'
+      },
+      {
+        id: 'ch2-s2bd-stronghold',
+        text: 'Seek out the ruins of those who came before. Knowledge is power.',
+        nextScene: 'ch3-stronghold',
+        morality: 'grey',
+        statChanges: { cunning: 2, experience: 200 },
+        consequence: 'The Shade knows the way. It always does.'
       }
     ]
   },
@@ -848,6 +935,15 @@ export const SCENES: Record<string, Scene> = {
         morality: 'grey',
         statChanges: { cunning: 3 },
         consequence: 'The First tilts what serves as its head. "A negotiator. How refreshing. They usually just scream."'
+      },
+      {
+        id: 'ch3-pc-notorious',
+        text: 'Hold your ground as they name your betrayals aloud.',
+        nextScene: 'ch3-notorious-court',
+        morality: 'dark',
+        minBetrayals: 3,
+        statChanges: { darkness: 2 },
+        consequence: 'The First\'s voice changes. "Ah. The Betrayer. We know what you are."'
       }
     ]
   },
@@ -889,6 +985,24 @@ export const SCENES: Record<string, Scene> = {
         morality: 'grey',
         statChanges: { cunning: 3 },
         consequence: 'The Shade hesitates. Just for a moment. "I... yes. There is something. But first you should know: I have not been honest about everything."'
+      },
+      {
+        id: 'ch3-pco-bribe',
+        text: 'Offer the Pale Court tribute — gold infused with the power of two broken seals.',
+        nextScene: 'ch3-court-bribe-result',
+        morality: 'dark',
+        goldCost: 60,
+        statChanges: { cunning: 3, corruption: 5 },
+        consequence: 'The First examines the offering. "Seal-touched gold. How... novel. You think to buy ancient beings?" A pause. "It is working. How irritating."'
+      },
+      {
+        id: 'ch3-pco-cun-exploit',
+        text: 'You notice it: the Second and Third are not aligned with the First. Exploit the fracture.',
+        nextScene: 'ch3-court-schism',
+        morality: 'dark',
+        requires: { cunning: 20 },
+        statChanges: { cunning: 5, darkness: 2 },
+        consequence: '"The Second hesitates when the First speaks," you say aloud. The Court goes very still. You\'ve touched something they never expected an outsider to see.'
       }
     ]
   },
@@ -1108,6 +1222,50 @@ export const SCENES: Record<string, Scene> = {
         morality: 'dark',
         statChanges: { darkness: 5, corruption: 5 },
         consequence: '"That is what they all say," the Shade whispers. "And almost none of them can do it." Its stars-for-eyes study you. "But almost none is not none."'
+      },
+      {
+        id: 'ch4-tc-noble-death',
+        text: '"There is a third option. Wear the Crown. Then destroy it — and myself — permanently."',
+        nextScene: 'ch4-sacrifice-path',
+        morality: 'grey',
+        statChanges: { corruption: -10 },
+        consequence: 'The Shade freezes. "How do you know about that?" A long silence. "You shouldn\'t know about that."'
+      },
+      {
+        id: 'ch4-tc-bribe-shade',
+        text: 'Place your remaining gold at the altar. "Every crown has a price. Name the Shade\'s."',
+        nextScene: 'ch4-sacrifice-path',
+        morality: 'grey',
+        goldCost: 50,
+        statChanges: { cunning: 3 },
+        consequence: 'The gold melts into the altar. The Shade stiffens. "You... you found a way to speak to the Crown directly. Through offering." It trembles. "It is showing you the fourth path."'
+      },
+      {
+        id: 'ch4-tc-str-forge',
+        text: 'Examine the ancient forge beside the altar. With enough strength, the Crown can be reshaped.',
+        nextScene: 'ch4-str-forge',
+        morality: 'evil',
+        requires: { strength: 20 },
+        statChanges: { strength: 3 },
+        consequence: 'The forge responds to your presence. The Shade looks alarmed. "No one has — that forge has been cold for a millennium—"'
+      },
+      {
+        id: 'ch4-tc-cun-decode',
+        text: 'Study the Crown\'s sigils. There is a pattern here that no one else has read.',
+        nextScene: 'ch4-cun-unravel',
+        morality: 'grey',
+        requires: { cunning: 20 },
+        statChanges: { cunning: 3 },
+        consequence: 'The sigils resolve under your gaze like letters written in a language you didn\'t know you spoke.'
+      },
+      {
+        id: 'ch4-tc-notorious',
+        text: 'The Crown recoils from your touch. Your betrayals precede you even here.',
+        nextScene: 'ch4-notorious-crown',
+        morality: 'dark',
+        minBetrayals: 3,
+        statChanges: { darkness: 3 },
+        consequence: 'The sigils flicker — a warning. The Shade watches with tense, knowing eyes.'
       }
     ]
   },
@@ -1343,6 +1501,582 @@ export const SCENES: Record<string, Scene> = {
       }
     ]
   },
+
+  // ═══════════════════════════════════════════════════════
+  // BLACK MARKET SHOP
+  // ═══════════════════════════════════════════════════════
+
+  'black-market': {
+    id: 'black-market',
+    chapter: 2,
+    title: 'The Black Market',
+    backgroundMood: 'dungeon',
+    narrative: [
+      'A network of contraband laid out on oilskin cloth: weapons forged in places that don\'t appear on maps, artifacts stolen from royal vaults, and substances that would earn their maker a hanging.',
+      'The merchant — if you can call them that — is a hooded figure with three visible scars and no visible eyes.',
+      '"Browse," the figure says. "Touch nothing you cannot afford. Payment is gold or... other currencies."',
+      'You have gold. The question is what it buys.',
+    ],
+    choices: [
+      {
+        id: 'bm-cursed-blade',
+        text: 'Purchase the Cursed Blade — a weapon that drinks blood and strengthens its wielder.',
+        nextScene: 'ch2-capital-approach',
+        morality: 'evil',
+        goldCost: 45,
+        statChanges: { strength: 4, darkness: 3, corruption: 5 },
+        items: [{
+          id: 'cursed-blade',
+          name: 'Cursed Blade',
+          description: 'A sword that hums when it tastes blood. It is always hungry.',
+          type: 'weapon',
+          rarity: 'cursed',
+          effect: { strength: 4 },
+          lore: 'Forged in a pit where screaming never stops. The smith went blind after completing it.'
+        }],
+        consequence: 'The blade shivers when you grip it. It knows you. It approves.'
+      },
+      {
+        id: 'bm-plague-vial',
+        text: 'Purchase the Plague Vial — a concentrated toxin for those who prefer subtlety to swords.',
+        nextScene: 'ch2-capital-approach',
+        morality: 'evil',
+        goldCost: 35,
+        statChanges: { cunning: 4, darkness: 2, corruption: 3 },
+        classBonus: ['plague-doctor', 'necromancer'],
+        items: [{
+          id: 'plague-vial',
+          name: 'Plague Vial',
+          description: 'A glass vial containing something that should not exist. Handle with intent.',
+          type: 'consumable',
+          rarity: 'legendary',
+          effect: { cunning: 3 },
+          lore: 'The Plague Doctor who brewed it survived. Her patients did not.'
+        }],
+        consequence: 'The vial is cold. Unnaturally cold. Whatever is inside, it is patient.'
+      },
+      {
+        id: 'bm-shadow-cloak',
+        text: 'Purchase the Shadow Cloak — woven from distilled darkness.',
+        nextScene: 'ch2-capital-approach',
+        morality: 'dark',
+        goldCost: 50,
+        statChanges: { cunning: 3, darkness: 4 },
+        classBonus: ['shadowblade'],
+        items: [{
+          id: 'shadow-cloak',
+          name: 'Shadow Cloak',
+          description: 'A cloak that makes you part of every shadow you stand near.',
+          type: 'armor',
+          rarity: 'legendary',
+          effect: { cunning: 3, darkness: 2 },
+          lore: 'The previous owner was never found. Perhaps that was the point.'
+        }],
+        consequence: 'The cloak settles over your shoulders like a second skin. The shadows around you deepen.'
+      },
+      {
+        id: 'bm-warlords-gauntlet',
+        text: 'Purchase the Warlord\'s Gauntlet — the fist of a dead conqueror, preserved and enchanted.',
+        nextScene: 'ch2-capital-approach',
+        morality: 'dark',
+        goldCost: 40,
+        statChanges: { strength: 5, darkness: 2 },
+        classBonus: ['warlord'],
+        items: [{
+          id: 'warlords-gauntlet',
+          name: 'Warlord\'s Gauntlet',
+          description: 'An iron gauntlet that remembers the grip of a conqueror who never lost.',
+          type: 'armor',
+          rarity: 'legendary',
+          effect: { strength: 5 },
+          lore: 'He died in his bed. That is the cruelest irony of all.'
+        }],
+        consequence: 'The gauntlet fits perfectly. You make a fist. The air cracks.'
+      },
+      {
+        id: 'bm-nothing',
+        text: 'Browse and leave. Gold is more useful kept.',
+        nextScene: 'ch2-capital-approach',
+        morality: 'neutral',
+        consequence: 'The merchant watches you go. "Come back when you\'re desperate," they say. "Everyone does."'
+      }
+    ]
+  },
+
+  'black-market-ch3': {
+    id: 'black-market-ch3',
+    chapter: 3,
+    title: 'The Merchant Between Worlds',
+    backgroundMood: 'abyss',
+    narrative: [
+      'Somehow, impossibly, the hooded merchant is here. In the space between life and nothing.',
+      '"You again," they say. The scars are different. Or perhaps the face is different. Hard to tell without eyes.',
+      '"I trade in places that exist. This place exists. Therefore I trade." Their logic is impeccable and deeply unsettling.',
+      'The wares are different here. Darker. More desperate. Things pulled from the edges of reality.',
+    ],
+    choices: [
+      {
+        id: 'bm3-void-shard',
+        text: 'Purchase a Shard of the Void — condensed nothingness that amplifies dark power.',
+        nextScene: 'ch3-pale-court',
+        morality: 'evil',
+        goldCost: 55,
+        statChanges: { darkness: 6, corruption: 8, strength: 2 },
+        items: [{
+          id: 'void-shard',
+          name: 'Shard of the Void',
+          description: 'A fragment of absolute nothing. It weighs less than memory.',
+          type: 'artifact',
+          rarity: 'cursed',
+          effect: { darkness: 5 },
+          lore: 'The Void does not sell pieces of itself. This was stolen.'
+        }],
+        consequence: 'The shard floats between your fingers. Where it touches you, sensation ceases. Where it leaves, sensation returns sharper.'
+      },
+      {
+        id: 'bm3-seal-breaker',
+        text: 'Purchase the Seal-Breaker Amulet — designed specifically to weaken the Pale Court\'s anchors.',
+        nextScene: 'ch3-pale-court',
+        morality: 'grey',
+        goldCost: 65,
+        statChanges: { cunning: 4 },
+        items: [{
+          id: 'seal-breaker-amulet',
+          name: 'Seal-Breaker Amulet',
+          description: 'An amulet that vibrates in the presence of seals and bindings.',
+          type: 'artifact',
+          rarity: 'legendary',
+          effect: { cunning: 4 },
+          lore: 'Made by someone who understood that locks exist to be opened.'
+        }],
+        consequence: 'The amulet pulses against your chest. It can feel the Third Seal. It is eager.'
+      },
+      {
+        id: 'bm3-nothing',
+        text: 'Leave the merchant. You have what you need.',
+        nextScene: 'ch3-pale-court',
+        morality: 'neutral',
+        consequence: '"Until the next impossible place," the merchant says. You suspect they mean it.'
+      }
+    ]
+  },
+
+  // ═══════════════════════════════════════════════════════
+  // COURT BRIBE & SCHISM (New Ch3 branches)
+  // ═══════════════════════════════════════════════════════
+
+  'ch3-court-bribe-result': {
+    id: 'ch3-court-bribe-result',
+    chapter: 3,
+    title: 'The Price of Ancients',
+    backgroundMood: 'abyss',
+    narrative: [
+      'The seal-touched gold dissolves into the Court\'s architecture, becoming part of their grey geometry.',
+      'The First is displeased. The Second is intrigued. The Third is amused.',
+      '"You have bought yourself... a concession," the Second says. "Not the Seal. But information. A path the First would not have offered."',
+      '"The Third Seal can be accessed through their archive. A place even the First cannot enter without the other two\'s consent."',
+      'The Second looks at the First. Something passes between them that predates language.',
+      '"Go," the Second says to you. "Before the First reconsiders."',
+    ],
+    choices: [
+      {
+        id: 'ch3-cbr-archive',
+        text: 'Enter the archive while you have passage.',
+        nextScene: 'ch3-seal-three',
+        morality: 'dark',
+        statChanges: { cunning: 4, corruption: 5, experience: 200 },
+        consequence: 'The archive is a library of consumed souls. The Third Seal rests at its center like a pearl in an oyster. You take it before anything changes its mind.'
+      }
+    ]
+  },
+
+  'ch3-court-schism': {
+    id: 'ch3-court-schism',
+    chapter: 3,
+    title: 'The Fracture Within',
+    backgroundMood: 'abyss',
+    narrative: [
+      'The Second turns to face the First. The Third watches with what might be anticipation.',
+      '"You told the aspirant about the Third Seal\'s true nature," the Second says to the First. "You said we would decide together."',
+      '"I made no such—"',
+      '"You always do this," the Second continues. "For twelve thousand years. Always the one who decides. We are three. Not one."',
+      'The Third shifts. "The aspirant is correct. We are not... unified."',
+      'You watch the oldest alliance in existence crack like ice under pressure.',
+      'The Third looks at you. "I will give you the Seal," it says, "if you do something the First has always refused: end me. I am tired."',
+    ],
+    choices: [
+      {
+        id: 'ch3-cs-end-third',
+        text: '"Granted. You have earned your rest."',
+        nextScene: 'ch3-seal-three',
+        morality: 'grey',
+        statChanges: { darkness: 3, killCount: 1, cunning: 3, experience: 250 },
+        consequence: 'The Third dissolves with a sound like a sigh held for millennia. The Seal falls from where its heart would have been.'
+      },
+      {
+        id: 'ch3-cs-exploit-all',
+        text: 'Use the chaos. Take the Seal while all three are distracted by their fracture.',
+        nextScene: 'ch3-seal-three',
+        morality: 'evil',
+        statChanges: { cunning: 5, corruption: 8, betrayals: 1, experience: 200 },
+        consequence: 'Three beings who have existed since before time look at you with identical expressions of betrayal. You take the Seal and run.'
+      }
+    ]
+  },
+
+  // ═══════════════════════════════════════════════════════
+  // NPC SUSPICION SCENES (Ch3 & Ch4)
+  // ═══════════════════════════════════════════════════════
+
+  'ch3-notorious-court': {
+    id: 'ch3-notorious-court',
+    chapter: 3,
+    title: 'A Reputation Precedes',
+    backgroundMood: 'abyss',
+    narrative: [
+      'The Pale Court has heard of you. Not just your power — your methods.',
+      '"The Betrayer walks our halls," the First announces. "Three oaths broken. Three trusts violated. We have been watching."',
+      '"Your kind is... familiar to us," the Second says. "We have consumed many like you. The flavour of broken promises is distinctive."',
+      'The Third says nothing. But it moves away from you, just slightly.',
+      'You notice: the usual offers and negotiations are absent. They do not trust you enough to bargain.',
+    ],
+    choices: [
+      {
+        id: 'ch3-nc-acknowledge',
+        text: '"My reputation is earned. Every betrayal served a purpose."',
+        nextScene: 'ch3-court-battle',
+        morality: 'evil',
+        statChanges: { darkness: 3, corruption: 5 },
+        consequence: '"Purpose," the First repeats. "Yes. That is what they all say. Let us see if your purpose survives combat."'
+      },
+      {
+        id: 'ch3-nc-deny',
+        text: '"Betrayal implies trust existed. I never offered trust."',
+        nextScene: 'ch3-pale-court-offer',
+        morality: 'dark',
+        statChanges: { cunning: 2 },
+        consequence: 'The Third laughs — a sound like glass breaking underwater. "Pedantic. I like it. Perhaps we can work with this one."'
+      }
+    ]
+  },
+
+  'ch4-notorious-crown': {
+    id: 'ch4-notorious-crown',
+    chapter: 4,
+    title: 'The Crown Remembers',
+    backgroundMood: 'ritual',
+    narrative: [
+      'The Crown sits on the altar, and you reach for it.',
+      'It recoils.',
+      'Not physically — but the sigils dim. The air grows colder. The Shade watches with narrowed star-eyes.',
+      '"The Crown knows," the Shade says carefully. "It has felt your choices. The broken promises. The used allies."',
+      '"It will still accept you. But the binding will be... different. Harder. It will resist you at every turn."',
+      '"You will wear it like a punishment rather than a crown."',
+      'Somewhere, the ghosts of everyone you\'ve betrayed are watching.',
+    ],
+    choices: [
+      {
+        id: 'ch4-nc-force',
+        text: '"I have never needed to be liked. Only obeyed." Seize the Crown.',
+        nextScene: 'ending-dark-sovereign',
+        morality: 'evil',
+        statChanges: { darkness: 8, corruption: 15 },
+        consequence: 'The Crown screams as you place it on your head. It fights you. You hold it there until it stops.'
+      },
+      {
+        id: 'ch4-nc-accept-cost',
+        text: '"Then let it punish me. I will carry what I\'ve earned."',
+        nextScene: 'ending-dark-sovereign',
+        morality: 'dark',
+        statChanges: { darkness: 5, corruption: 10 },
+        consequence: 'The Crown settles slowly, reluctantly. It will never be comfortable. You don\'t expect it to be.'
+      }
+    ]
+  },
+
+  // ═══════════════════════════════════════════════════════
+  // CH3 EXPANSION SCENES
+  // ═══════════════════════════════════════════════════════
+
+  'ch3-abyss-descent': {
+    id: 'ch3-abyss-descent',
+    chapter: 3,
+    title: 'The Descent',
+    backgroundMood: 'abyss',
+    narrative: [
+      'The path to the Pale Court leads through layers of the Abyss, each one stranger than the last.',
+      'The first layer is memory — you walk through fragments of other people\'s lives, shattered and scattered like glass.',
+      'The second layer is silence — absolute, total, the kind that makes you hear your own blood.',
+      'The third layer is hunger. Not yours. The Abyss itself is hungry. It knows you carry three seals\' worth of power.',
+      'Something moves in the dark. Something large.',
+      '"Do not look at it," the Shade warns. "It feeds on attention."',
+    ],
+    choices: [
+      {
+        id: 'ch3-ad-fight',
+        text: 'Look at it deliberately. Challenge whatever lurks here.',
+        nextScene: 'ch3-abyss-guardian',
+        morality: 'evil',
+        statChanges: { strength: 3, darkness: 4, corruption: 5 },
+        consequence: 'It is vast. It is old. It was waiting for someone stupid enough to look directly at it. You are not stupid. But you are strong.'
+      },
+      {
+        id: 'ch3-ad-sneak',
+        text: 'Navigate by sound and instinct. Keep your eyes on the path.',
+        nextScene: 'ch3-pale-court',
+        morality: 'grey',
+        requires: { cunning: 20 },
+        statChanges: { cunning: 4 },
+        consequence: 'You map the Abyss by its sounds, its temperatures, its smells. The creature follows. It does not catch you.'
+      },
+      {
+        id: 'ch3-ad-feed',
+        text: 'Feed it — give it a soul from your collection. The ones from the seals.',
+        nextScene: 'ch3-pale-court',
+        morality: 'evil',
+        statChanges: { darkness: 5, corruption: 10 },
+        consequence: 'It accepts the offering. It stops following. The Shade looks at you differently after. You\'ve sacrificed a soul as casually as dropping a coin.'
+      },
+      {
+        id: 'ch3-ad-shop',
+        text: 'In the darkness, you notice a familiar hooded figure. The merchant. Here.',
+        nextScene: 'black-market-ch3',
+        morality: 'neutral',
+        consequence: '"Impossible places," the merchant says from their impossible stall. "My specialty."'
+      }
+    ]
+  },
+
+  'ch3-abyss-guardian': {
+    id: 'ch3-abyss-guardian',
+    chapter: 3,
+    title: 'The Thing Below',
+    backgroundMood: 'abyss',
+    narrative: [
+      'It has no name. Names are a courtesy extended to things that exist in the light.',
+      'It is made of compressed darkness and the memories of everyone who ever looked into the Abyss and flinched.',
+      'It does not speak. It communicates by changing the temperature of your fear.',
+      'The battle is unlike anything you\'ve experienced — fought in a dimension where physics is a suggestion and willpower is the only weapon.',
+      'When it is over, you are changed. The thing dissolves into the dark from which it came.',
+      'You have proven something to the Abyss. You are not prey.',
+    ],
+    choices: [
+      {
+        id: 'ch3-ag-continue',
+        text: 'Press forward to the Pale Court. Whatever comes next cannot be worse.',
+        nextScene: 'ch3-pale-court',
+        morality: 'evil',
+        statChanges: { strength: 4, health: -25, experience: 300 },
+        consequence: '"It can," the Shade says quietly. "But you\'re ready for it."'
+      }
+    ]
+  },
+
+  'ch3-stronghold': {
+    id: 'ch3-stronghold',
+    chapter: 3,
+    title: 'The Fortress of Will',
+    backgroundMood: 'tower',
+    narrative: [
+      'Between the Abyss layers, you find something unexpected: a fortress built by a previous aspirant.',
+      'They never made it to the Crown. But they left behind walls, wards, and a journal.',
+      'The journal describes the Pale Court\'s weakness in clinical detail. The writer was meticulous. They were also slowly going mad.',
+      'The last entry reads: "They cannot be killed. They can only be bound. The Crown was never a weapon — it was a cage. I wish I had known this before I broke the second seal."',
+      'Below: a cache of supplies, weapons, and a map of the Pale Court\'s domain.',
+    ],
+    choices: [
+      {
+        id: 'ch3-sf-study',
+        text: 'Study the journal thoroughly. Knowledge is the sharpest weapon.',
+        nextScene: 'ch3-pale-court',
+        morality: 'grey',
+        statChanges: { cunning: 4, experience: 150 },
+        consequence: 'Hours pass. You understand the Pale Court now — their structure, their rituals, their fear. The aspirant was right about everything except themselves.'
+      },
+      {
+        id: 'ch3-sf-loot',
+        text: 'Take the weapons and supplies. Theory is for scholars.',
+        nextScene: 'ch3-pale-court',
+        morality: 'dark',
+        statChanges: { strength: 3, gold: 40 },
+        consequence: 'The cache includes gold, a reinforced blade, and something that might be dried rations or might be dried regret. Hard to tell in this light.'
+      }
+    ]
+  },
+
+  // ═══════════════════════════════════════════════════════
+  // CH4 EXPANSION SCENES
+  // ═══════════════════════════════════════════════════════
+
+  'ch4-sacrifice-path': {
+    id: 'ch4-sacrifice-path',
+    chapter: 4,
+    title: 'The Noble End',
+    backgroundMood: 'ritual',
+    narrative: [
+      'There is another way. The Shade mentioned it once, briefly, as if hoping you wouldn\'t hear.',
+      'The Crown can be destroyed — but not by breaking it. By wearing it and willing it to consume you instead.',
+      'A sovereign who chooses death over dominion. The Crown was never designed for this. It is a vulnerability in the system.',
+      '"You would die," the Shade says. "Completely. No ghost. No shade. No echo. Gone."',
+      '"And the Pale Court?"',
+      '"Sealed forever. Without a sovereign to break the seals, the prison becomes permanent."',
+      '"The cost is you."',
+    ],
+    choices: [
+      {
+        id: 'ch4-sp-accept',
+        text: '"Then let it end. Not for the kingdom. Not for redemption. Because it\'s the right thing."',
+        nextScene: 'ending-fallen-sovereign',
+        morality: 'grey',
+        statChanges: { corruption: -30, darkness: -10 },
+        consequence: 'The Shade looks at you for a long time. "In a thousand years," it says, "you are the first to say that and mean it."'
+      },
+      {
+        id: 'ch4-sp-refuse',
+        text: '"No. I did not come this far to die as a footnote. I will find another way."',
+        nextScene: 'ch4-the-crown',
+        morality: 'dark',
+        statChanges: { corruption: 5 },
+        consequence: '"There is no other way," the Shade says. But it follows you anyway. It always does.'
+      }
+    ]
+  },
+
+  'ch4-str-forge': {
+    id: 'ch4-str-forge',
+    chapter: 4,
+    title: 'The Crown\'s Forge',
+    backgroundMood: 'ritual',
+    narrative: [
+      'Before the altar, you find the forge where the Crown was made. Ancient. Dormant.',
+      'With enough raw strength, you could reforge the Crown\'s binding — reshape it from a prison into a weapon.',
+      'The Shade watches nervously. "That was not what the Crown was designed—"',
+      '"I don\'t care what it was designed for. I care what it can become."',
+      'The forge responds to your will. The metal glows. The sigils shift.',
+    ],
+    choices: [
+      {
+        id: 'ch4-sf-reforge',
+        text: 'Reforge the Crown with raw power. Make it answer to strength alone.',
+        nextScene: 'ending-dark-sovereign',
+        morality: 'evil',
+        requires: { strength: 20 },
+        statChanges: { strength: 5, darkness: 8, corruption: 10 },
+        consequence: 'The Crown screams as you reshape it. The Shade screams too. When it\'s done, the Crown is different. Sharper. More yours.'
+      },
+      {
+        id: 'ch4-sf-preserve',
+        text: 'Leave the forge. The Crown is what it is. You will adapt.',
+        nextScene: 'ch4-the-crown',
+        morality: 'grey',
+        consequence: '"Wise," the Shade says with evident relief. "The Crown has broken everyone who tried to change it."'
+      }
+    ]
+  },
+
+  'ch4-cun-unravel': {
+    id: 'ch4-cun-unravel',
+    chapter: 4,
+    title: 'The Hidden Architecture',
+    backgroundMood: 'ritual',
+    narrative: [
+      'You see what no previous aspirant saw: the Crown\'s sigils are not decorative. They\'re a language.',
+      'Hours of study reveal a hidden instruction set — commands embedded by the original creator.',
+      'The Crown has a fourth mode. Not sovereign. Not jailer. Not destroyer.',
+      '"Architect," you read aloud. The sigils pulse.',
+      '"What?" the Shade says, alarmed. "That wasn\'t — I never — there was no fourth mode."',
+      '"There was. You just couldn\'t read the language."',
+    ],
+    choices: [
+      {
+        id: 'ch4-cu-architect',
+        text: '"I will not rule or imprison. I will rebuild. Architect mode."',
+        nextScene: 'ending-reformer',
+        morality: 'grey',
+        requires: { cunning: 20 },
+        statChanges: { cunning: 5, corruption: -15, darkness: -5 },
+        consequence: 'The Crown activates differently. Not binding. Not consuming. Building. The world shifts, not under dominion but under design.'
+      },
+      {
+        id: 'ch4-cu-share',
+        text: '"Tell the Shade. Maybe they knew and forgot."',
+        nextScene: 'ch4-the-crown-redemption',
+        morality: 'grey',
+        statChanges: { cunning: 3, corruption: -10 },
+        consequence: 'The Shade reads the sigils you\'ve decoded. It is silent for a very long time. "I... did not see this. In a thousand years." It sounds ashamed. And hopeful.'
+      }
+    ]
+  },
+
+  // ═══════════════════════════════════════════════════════
+  // DEATH ENDINGS
+  // ═══════════════════════════════════════════════════════
+
+  'ending-void-consumption': {
+    id: 'ending-void-consumption',
+    chapter: 4,
+    title: 'Consumed by the Void',
+    backgroundMood: 'abyss',
+    isEnding: true,
+    endingType: 'death',
+    narrative: [
+      'THE CORRUPTION HAS REACHED ITS LIMIT.',
+      'You feel it first as a coldness — not the cold of winter, but the cold of absence. The cold of places where nothing has ever existed.',
+      'The darkness you\'ve been carrying is not your servant. It never was. You were its vessel, and the vessel is full.',
+      'The Shade watches as you begin to dissolve. Not die — dissolve. Your edges blur. Your thoughts scatter like startled birds.',
+      '"I warned you," it says. But there is no satisfaction in its voice. Only an old, deep sadness.',
+      'The seals tear free of you one by one. The power you gathered returns to the void from which it came.',
+      'You try to scream. You cannot remember what screaming is.',
+      'The last thing you perceive is the Obsidian Crown, still on its altar, still waiting.',
+      'It will wait for another vessel. It has waited before.',
+      'You have become nothing. Not even a shadow remains.',
+    ],
+    choices: [
+      {
+        id: 'ending-vc-play-again',
+        text: 'The void takes everything. Begin another story.',
+        nextScene: 'restart',
+        morality: 'evil',
+        consequence: ''
+      }
+    ]
+  },
+
+  'ending-fallen-sovereign': {
+    id: 'ending-fallen-sovereign',
+    chapter: 4,
+    title: 'The Fallen Sovereign',
+    backgroundMood: 'ritual',
+    isEnding: true,
+    endingType: 'death',
+    narrative: [
+      'YOU PUT ON THE CROWN AND WILL IT TO END.',
+      'Not to rule. Not to bind. To consume itself, and you with it.',
+      'The Crown fights. It was not made for this. But you are stronger than a thousand-year-old artifact, in the one way that matters: you are willing to lose.',
+      'The seals activate in reverse. The Pale Court\'s prison locks permanently. The key — you — is destroyed in the locking.',
+      'The Shade watches you burn from the inside out. Starlight tears stream from its dark face.',
+      '"You could have ruled," it says. "You could have lived."',
+      '"I could have," you agree. Your voice is already fading. "But this is the right thing."',
+      'The Crown shatters. The Abyss seals. The Pale Court is imprisoned for eternity.',
+      'And you — the sovereign who chose to fall — become a legend that no one will quite believe.',
+      'Sera will name a library after you. Marcus will write your story, getting half of it wrong.',
+      'The girl with the crow doll will tell her grandchildren about a stranger who came to Thornwatch.',
+      'You will not know any of this. But you suspected it, at the end, and that was enough.',
+    ],
+    choices: [
+      {
+        id: 'ending-fs-play-again',
+        text: 'A sovereign who fell so others could stand. Begin another story.',
+        nextScene: 'restart',
+        morality: 'grey',
+        consequence: ''
+      }
+    ]
+  },
+
+  // ═══════════════════════════════════════════════════════
+  // RESTART
+  // ═══════════════════════════════════════════════════════
 
   'restart': {
     id: 'restart',
