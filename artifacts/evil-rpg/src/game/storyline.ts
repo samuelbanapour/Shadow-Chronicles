@@ -653,6 +653,57 @@ export const SCENES: Record<string, Scene> = {
         morality: 'evil',
         statChanges: { cunning: 2, darkness: 2 },
         consequence: '"...Alright," Marcus says quietly. He knows you mean it. He helps you anyway, because he has no other options.'
+      },
+      {
+        id: 'ch2-mi-loyalty-test',
+        text: 'Marcus stiffens. "I know what you are. Three broken oaths. Prove you can be trusted."',
+        nextScene: 'ch2-loyalty-proof',
+        morality: 'dark',
+        minBetrayals: 3,
+        statChanges: { darkness: 1 },
+        consequence: '"Word travels," Marcus says coldly. "Three people trusted you. Three people regret it. I won\'t be the fourth without proof."'
+      }
+    ]
+  },
+
+  'ch2-loyalty-proof': {
+    id: 'ch2-loyalty-proof',
+    chapter: 2,
+    title: 'The Price of Trust',
+    backgroundMood: 'forest',
+    narrative: [
+      'Marcus crosses his arms. His remaining fingers tap against his elbow — a nervous habit, but his eyes are steel.',
+      '"I\'ve heard the stories," he says. "The village elder you bribed. The knight you broke faith with. The ally you used and discarded."',
+      '"So here\'s my test: give me something that costs you. Not gold — I can\'t eat gold out here. Give me something real."',
+      '"Your best weapon. Your most powerful artifact. Something that proves you understand what trust means."',
+      'He waits. The forest is very quiet.',
+    ],
+    choices: [
+      {
+        id: 'ch2-lp-give-weapon',
+        text: 'Hand over your most valuable item. "Here. This costs me. That\'s the point."',
+        nextScene: 'ch2-palace-infiltration',
+        morality: 'grey',
+        goldCost: 30,
+        statChanges: { cunning: 2, corruption: -5 },
+        consequence: 'Marcus examines the offering. "This actually hurts you to give up." He nods slowly. "Good. That\'s trust. Ugly, expensive trust. But trust." He leads you to the palace.'
+      },
+      {
+        id: 'ch2-lp-refuse',
+        text: '"I don\'t prove anything to anyone. Lead me or die."',
+        nextScene: 'ch2-capital-approach',
+        morality: 'evil',
+        statChanges: { darkness: 3, betrayals: 1, corruption: 5 },
+        consequence: 'Marcus doesn\'t flinch. But he doesn\'t help you, either. "Find the palace yourself, Betrayer." He vanishes into the forest. You\'re alone.'
+      },
+      {
+        id: 'ch2-lp-persuade',
+        text: '"I\'ve broken oaths because I had to. Not because I wanted to. There\'s a difference."',
+        nextScene: 'ch2-palace-infiltration',
+        morality: 'dark',
+        requires: { cunning: 20 },
+        statChanges: { cunning: 3 },
+        consequence: 'Marcus studies your face for a long time. "I believe you believe that," he says finally. "That\'ll have to be enough." He draws his map.'
       }
     ]
   },
@@ -938,6 +989,14 @@ export const SCENES: Record<string, Scene> = {
         morality: 'grey',
         statChanges: { cunning: 2, experience: 200 },
         consequence: 'The Shade tilts its head. "There was one. Long ago. They left traces. If you can find them."'
+      },
+      {
+        id: 'ch2-s2b-shop',
+        text: 'In the ruins of the throne room, a familiar hooded figure emerges from the rubble. The merchant.',
+        nextScene: 'black-market',
+        morality: 'neutral',
+        statChanges: { cunning: 1 },
+        consequence: '"Regime change," the merchant says, setting up their oilskin on the dead king\'s table. "Good for business. Browse?"'
       }
     ]
   },
@@ -1681,6 +1740,15 @@ export const SCENES: Record<string, Scene> = {
         nextScene: 'ch2-capital-approach',
         morality: 'neutral',
         consequence: 'The merchant watches you go. "Come back when you\'re desperate," they say. "Everyone does."'
+      },
+      {
+        id: 'bm-refused',
+        text: 'The merchant pulls the oilskin away. "Not you. Word travels — even here."',
+        nextScene: 'ch2-capital-approach',
+        morality: 'dark',
+        minBetrayals: 3,
+        statChanges: { darkness: 2 },
+        consequence: '"Three oaths broken," the merchant says, eyeless face turned toward you. "I trade with criminals, killers, and monsters. But not oathbreakers. Bad for business." The wares vanish.'
       }
     ]
   },
@@ -1776,6 +1844,15 @@ export const SCENES: Record<string, Scene> = {
         nextScene: 'ch3-pale-court',
         morality: 'neutral',
         consequence: '"Until the next impossible place," the merchant says. You suspect they mean it.'
+      },
+      {
+        id: 'bm3-refused',
+        text: 'The merchant folds the oilskin. "Your reputation precedes you. I don\'t serve oathbreakers."',
+        nextScene: 'ch3-pale-court',
+        morality: 'dark',
+        minBetrayals: 3,
+        statChanges: { darkness: 2 },
+        consequence: '"Even between worlds, word travels," the merchant says. "Three broken oaths. I sell to monsters, not liars. There is a difference." The stall dissolves into darkness.'
       }
     ]
   },

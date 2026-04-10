@@ -131,10 +131,6 @@ export function isChoiceLocked(
   playerClass?: string,
   betrayals?: number
 ): { locked: boolean; reason?: string } {
-  if (choice.classBonus && playerClass && !choice.classBonus.includes(playerClass as 'shadowblade' | 'necromancer' | 'warlord' | 'plague-doctor')) {
-    return { locked: true, reason: `${choice.classBonus.map(c => c.replace('-', ' ')).join('/')} only` };
-  }
-
   if (choice.minBetrayals !== undefined && (betrayals ?? 0) < choice.minBetrayals) {
     return { locked: true, reason: `Requires reputation (${choice.minBetrayals}+ betrayals)` };
   }

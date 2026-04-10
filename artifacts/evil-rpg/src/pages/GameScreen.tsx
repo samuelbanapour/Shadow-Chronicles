@@ -585,9 +585,9 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
                             <Coins className="w-2.5 h-2.5" />{choice.goldCost}g
                           </span>
                         )}
-                        {choice.classBonus && (
+                        {choice.classBonus && choice.classBonus.includes(state.player.class) && (
                           <span className="text-[0.6rem] text-blue-400/60 font-sans italic">
-                            [{choice.classBonus.map(c => c.replace('-', ' ')).join('/')}]
+                            [class bonus]
                           </span>
                         )}
                         {choice.statChanges && !lockStatus.locked && (
