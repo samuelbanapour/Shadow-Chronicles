@@ -85,6 +85,8 @@ export interface Scene {
   enemy?: Enemy;
 }
 
+export type ReputationLevel = 'none' | 'untrustworthy' | 'notorious' | 'legendary';
+
 export interface GameState {
   currentScene: string;
   player: {
@@ -99,6 +101,7 @@ export interface GameState {
     killCount: number;
     soulsConsumed: number;
     betrayals: number;
+    reputation: ReputationLevel;
   };
   gameStarted: boolean;
   chapter: number;

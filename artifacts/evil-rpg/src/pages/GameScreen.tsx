@@ -387,7 +387,7 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
                 <span className="text-[0.65rem] font-bold text-accent font-sans">{state.player.betrayals}</span>
               </div>
             )}
-            {getReputationLabel(state.player.betrayals) && (
+            {state.player.reputation !== 'none' && (
               <div className="mt-1 text-[0.6rem] font-bold text-red-400 font-sans tracking-wider uppercase border-t border-blood/20 pt-1.5">
                 {getReputationLabel(state.player.betrayals)}
               </div>

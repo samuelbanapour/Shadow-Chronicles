@@ -1,4 +1,4 @@
-import type { GameState, PlayerStats, Item, Scene, Choice } from './types';
+import type { GameState, PlayerStats, Item, Scene, Choice, ReputationLevel } from './types';
 import { SCENES } from './storyline';
 import { CLASSES } from './classes';
 
@@ -41,6 +41,7 @@ export function createInitialState(
       killCount: 0,
       soulsConsumed: 0,
       betrayals: 0,
+      reputation: 'none',
     }
   };
 }
@@ -101,6 +102,8 @@ export function applyChoice(state: GameState, choice: Choice): GameState {
   if (choice.goldCost !== undefined) {
     newState.player.stats.gold = Math.max(0, newState.player.stats.gold - choice.goldCost);
   }
+
+  newState.player.reputation = computeReputation(newState.player.betrayals);
 
   newState.player.choiceHistory.push(choice.id);
 
@@ -173,11 +176,22 @@ export function getDarknessLabel(darkness: number): string {
   return 'Untainted';
 }
 
+export function computeReputation(betrayals: number): ReputationLevel {
+  if (betrayals >= 5) return 'legendary';
+  if (betrayals >= 3) return 'notorious';
+  if (betrayals >= 1) return 'untrustworthy';
+  return 'none';
+}
+
+const REPUTATION_LABELS: Record<ReputationLevel, string | null> = {
+  none: null,
+  untrustworthy: 'Untrustworthy',
+  notorious: 'Notorious Betrayer',
+  legendary: 'Legendary Betrayer',
+};
+
 export function getReputationLabel(betrayals: number): string | null {
-  if (betrayals >= 5) return 'Legendary Betrayer';
-  if (betrayals >= 3) return 'Notorious Betrayer';
-  if (betrayals >= 1) return 'Untrustworthy';
-  return null;
+  return REPUTATION_LABELS[computeReputation(betrayals)];
 }
 
 export function checkCorruptionDeath(state: GameState): boolean {

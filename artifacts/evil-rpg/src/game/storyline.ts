@@ -509,7 +509,7 @@ export const SCENES: Record<string, Scene> = {
       {
         id: 'ch2-cr-cun-read',
         text: 'Study his scars, his posture, his missing fingers. You can read a man\'s entire history from his body.',
-        nextScene: 'ch2-marcus-intro',
+        nextScene: 'ch2-hidden-intel',
         morality: 'grey',
         requires: { cunning: 20 },
         statChanges: { cunning: 4 },
@@ -518,7 +518,7 @@ export const SCENES: Record<string, Scene> = {
       {
         id: 'ch2-cr-str-disarm',
         text: 'Close the distance in one step and pin him to the ground. Check for weapons, then talk.',
-        nextScene: 'ch2-marcus-intro',
+        nextScene: 'ch2-hidden-vault',
         morality: 'dark',
         requires: { strength: 20 },
         statChanges: { strength: 2, cunning: 1 },
@@ -531,6 +531,88 @@ export const SCENES: Record<string, Scene> = {
         morality: 'neutral',
         statChanges: { cunning: 1 },
         consequence: 'Among the supplies: dark artifacts, contraband weapons, and things that should not exist outside locked vaults.'
+      }
+    ]
+  },
+
+  'ch2-hidden-intel': {
+    id: 'ch2-hidden-intel',
+    chapter: 2,
+    title: 'The Spymaster\'s Secret',
+    backgroundMood: 'forest',
+    narrative: [
+      'Your reading reveals more than Marcus intended. The missing fingers, the precise scars — but also: a faded tattoo on his inner wrist. The mark of the King\'s Whispers.',
+      'He wasn\'t just a soldier. He was royal intelligence. And the tattoo means he still has access to the palace\'s hidden passage network.',
+      '"You see too much," Marcus says quietly. He doesn\'t deny it.',
+      '"The palace has seven secret entrances. Three are trapped. Two are sealed. One is guarded by something that was once human. And one..." he pauses. "One leads directly to the throne room."',
+      '"I\'ll show you. But you\'ll owe me something. Not gold. A promise: when you take the throne, the intelligence network survives."',
+    ],
+    choices: [
+      {
+        id: 'ch2-hi-agree',
+        text: '"The network survives. You have my word." Make the deal.',
+        nextScene: 'ch2-palace-infiltration',
+        morality: 'grey',
+        statChanges: { cunning: 4, experience: 200 },
+        items: [{
+          id: 'palace-map',
+          name: 'Palace Passage Map',
+          description: 'A detailed map of seven hidden entrances to the capital palace.',
+          type: 'artifact',
+          rarity: 'legendary',
+          effect: { cunning: 3 },
+          lore: 'Drawn from memory by a man who memorized it, then burned the original.'
+        }],
+        consequence: 'Marcus draws the map from memory. Seven passages. Seven chances. One throne.'
+      },
+      {
+        id: 'ch2-hi-take',
+        text: 'Extract the information by force. Promises are for the naive.',
+        nextScene: 'ch2-capital-approach',
+        morality: 'evil',
+        statChanges: { strength: 2, cunning: 2, betrayals: 1, corruption: 5 },
+        consequence: 'Marcus talks. Eventually, everyone talks. But the map he draws under duress is missing one passage. The safe one.'
+      }
+    ]
+  },
+
+  'ch2-hidden-vault': {
+    id: 'ch2-hidden-vault',
+    chapter: 2,
+    title: 'The Buried Armory',
+    backgroundMood: 'dungeon',
+    narrative: [
+      'When you pin Marcus, something clinks beneath his coat. Not just weapons — a key. Heavy, blackened iron, ancient.',
+      'After you release him, he sees you noticed. His expression shifts from fear to calculation.',
+      '"That key opens a vault beneath the crossroads," he says. "I found it two years ago. Never had the strength to force the door."',
+      'The vault is real. Cut into living rock beneath the road, hidden by centuries of soil. The key turns with a sound like a bone breaking.',
+      'Inside: a dead knight in ancient armor, still gripping a weapon that hums with contained violence. And gold. Quite a lot of gold.',
+    ],
+    choices: [
+      {
+        id: 'ch2-hv-take-all',
+        text: 'Take the weapon, the armor, and the gold. The dead don\'t negotiate.',
+        nextScene: 'ch2-capital-approach',
+        morality: 'evil',
+        statChanges: { strength: 4, gold: 60, darkness: 3, corruption: 3, experience: 200 },
+        items: [{
+          id: 'vault-greatsword',
+          name: 'Vault Knight\'s Greatsword',
+          description: 'A massive blade that vibrates with dormant fury. It wants to be swung.',
+          type: 'weapon',
+          rarity: 'legendary',
+          effect: { strength: 5 },
+          lore: 'The knight who wielded it killed forty men in a single battle. Then he walked into this vault and sat down.'
+        }],
+        consequence: 'The dead knight crumbles when you take its weapon. It was waiting for someone worthy. Or at least strong enough.'
+      },
+      {
+        id: 'ch2-hv-share',
+        text: 'Split the findings with Marcus. He found the vault; you opened it.',
+        nextScene: 'ch2-marcus-intro',
+        morality: 'grey',
+        statChanges: { strength: 3, gold: 30, cunning: 2, experience: 150 },
+        consequence: 'Marcus takes his share and looks at you differently. Not with trust — with respect. In this world, that may be more valuable.'
       }
     ]
   },
@@ -1606,15 +1688,33 @@ export const SCENES: Record<string, Scene> = {
   'black-market-ch3': {
     id: 'black-market-ch3',
     chapter: 3,
-    title: 'The Merchant Between Worlds',
+    title: 'The Black Market — Between Worlds',
     backgroundMood: 'abyss',
     narrative: [
       'Somehow, impossibly, the hooded merchant is here. In the space between life and nothing.',
       '"You again," they say. The scars are different. Or perhaps the face is different. Hard to tell without eyes.',
       '"I trade in places that exist. This place exists. Therefore I trade." Their logic is impeccable and deeply unsettling.',
-      'The wares are different here. Darker. More desperate. Things pulled from the edges of reality.',
+      'The wares are the same — and different. The same oilskin cloth, the same contraband, but new additions pulled from the edges of reality.',
     ],
     choices: [
+      {
+        id: 'bm3-cursed-blade',
+        text: 'Purchase the Cursed Blade — a weapon that drinks blood and strengthens its wielder.',
+        nextScene: 'ch3-pale-court',
+        morality: 'evil',
+        goldCost: 45,
+        statChanges: { strength: 4, darkness: 3, corruption: 5 },
+        items: [{
+          id: 'cursed-blade',
+          name: 'Cursed Blade',
+          description: 'A sword that hums when it tastes blood. It is always hungry.',
+          type: 'weapon',
+          rarity: 'cursed',
+          effect: { strength: 4 },
+          lore: 'Forged in a pit where screaming never stops. The smith went blind after completing it.'
+        }],
+        consequence: 'The blade shivers when you grip it. It knows you. It approves.'
+      },
       {
         id: 'bm3-void-shard',
         text: 'Purchase a Shard of the Void — condensed nothingness that amplifies dark power.',
@@ -1650,6 +1750,25 @@ export const SCENES: Record<string, Scene> = {
           lore: 'Made by someone who understood that locks exist to be opened.'
         }],
         consequence: 'The amulet pulses against your chest. It can feel the Third Seal. It is eager.'
+      },
+      {
+        id: 'bm3-shadow-cloak',
+        text: 'Purchase the Shadow Cloak — woven from distilled darkness.',
+        nextScene: 'ch3-pale-court',
+        morality: 'dark',
+        goldCost: 50,
+        statChanges: { cunning: 3, darkness: 4 },
+        classBonus: ['shadowblade'],
+        items: [{
+          id: 'shadow-cloak',
+          name: 'Shadow Cloak',
+          description: 'A cloak that makes you part of every shadow you stand near.',
+          type: 'armor',
+          rarity: 'legendary',
+          effect: { cunning: 3, darkness: 2 },
+          lore: 'The previous owner was never found. Perhaps that was the point.'
+        }],
+        consequence: 'The cloak settles over your shoulders like a second skin. The shadows around you deepen.'
       },
       {
         id: 'bm3-nothing',
