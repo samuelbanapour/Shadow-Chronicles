@@ -34,9 +34,15 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
 - **Description**: A dark fantasy browser RPG with a complex, branching storyline
 - **Features**:
   - 4 playable classes: Shadowblade, Necromancer, Warlord, Plague Doctor
-  - 4 full chapters with ~30+ scenes and 50+ narrative choices
-  - Multiple distinct endings: Dark Triumph, True Evil, Sacrifice, Reformer, True Jailer (Hidden Redemption)
+  - 4 full chapters with 55+ scenes and 121+ narrative choice links
+  - Multiple distinct endings: Dark Triumph, True Evil, Sacrifice, Reformer, True Jailer (Hidden Redemption), Void Consumption (death), Fallen Sovereign (death)
   - Full character stats system: health, mana, corruption, strength, cunning, darkness, gold, XP/leveling
+  - Stat-gated secret paths (Cunning ≥20, Strength ≥20 unlock hidden choices)
+  - Gold cost system: bribery options and Black Market shops (Ch2 + Ch3) with purchasable cursed items
+  - Class bonus indicators on choices (class-specific advantages)
+  - NPC suspicion system: NPCs react differently when betrayals ≥3 (Notorious Betrayer)
+  - Corruption death: reaching 100 corruption triggers Void Consumption ending
+  - Reputation labels: Untrustworthy (1+), Notorious Betrayer (3+), Legendary Betrayer (5+ betrayals)
   - Inventory system with items acquired through choices
   - Kill count, betrayal tracking, soul tracking
   - Auto-save to localStorage with continue support
