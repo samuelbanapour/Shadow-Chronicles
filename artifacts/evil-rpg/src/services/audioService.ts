@@ -142,6 +142,11 @@ class AudioService {
       }
     }
 
+    if (!this.muted && !this.currentAmbient && this.pendingMood && this.hasInteracted) {
+      this.currentMood = null;
+      this.playAmbient(this.pendingMood);
+    }
+
     return this.muted;
   }
 
@@ -180,6 +185,7 @@ class AudioService {
     this.currentAmbient = newAmbient;
     this.currentAmbientId = typeof id === 'number' ? id : null;
     this.currentMood = mood;
+    this.pendingMood = null;
   }
 
   stopAmbient(): void {
