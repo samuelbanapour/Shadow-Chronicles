@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Skull, Heart, Zap, Coins, Shield, Eye, BookOpen, X, ChevronRight, AlertTriangle, Star, Trophy, LogIn, LogOut } from 'lucide-react';
+import { Skull, Heart, Zap, Coins, Shield, Eye, BookOpen, X, ChevronRight, AlertTriangle, Star, Trophy, LogIn, LogOut, Volume2, VolumeX } from 'lucide-react';
 import type { GameState, Choice } from '@/game/types';
 import {
   getCurrentScene,
@@ -11,6 +11,7 @@ import {
   saveGame,
 } from '@/game/engine';
 import { playGames } from '@/services/playGames';
+import { audioService } from '@/services/audioService';
 
 interface GameScreenProps {
   state: GameState;
@@ -62,17 +63,23 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
   const [showAllNarrative, setShowAllNarrative] = useState(false);
   const [achToast, setAchToast] = useState<string | null>(null);
   const [pgsSignedIn, setPgsSignedIn] = useState(false);
+  const [isMuted, setIsMuted] = useState(audioService.isMuted());
   const narrativeRef = useRef<HTMLDivElement>(null);
 
   const scene = getCurrentScene(state);
 
   useEffect(() => {
+    audioService.init();
     playGames.init((name) => {
       setAchToast(name);
       setTimeout(() => setAchToast(null), 3500);
     });
     playGames.trigger('game_start');
     setPgsSignedIn(playGames.isSignedIn());
+    return () => {
+      audioService.stopHeartbeat();
+      audioService.stopAmbient();
+    };
   }, []);
 
   useEffect(() => {
@@ -81,6 +88,29 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
     setConsequenceText(null);
     setSelectedChoice(null);
   }, [state.currentScene]);
+
+  useEffect(() => {
+    if (scene) {
+      audioService.playAmbient(scene.backgroundMood);
+      const mood = scene.backgroundMood;
+      if (mood === 'forest' || mood === 'village') {
+        audioService.playSfx('crow');
+      } else if (mood === 'ritual') {
+        audioService.playSfx('thunder');
+      } else if (mood === 'battlefield') {
+        audioService.playSfx('sword');
+      }
+    }
+  }, [state.currentScene, scene]);
+
+  const highCorruption = state.player.stats.corruption > 70;
+  useEffect(() => {
+    if (highCorruption) {
+      audioService.startHeartbeat();
+    } else {
+      audioService.stopHeartbeat();
+    }
+  }, [highCorruption]);
 
   useEffect(() => {
     if (!showAllNarrative && scene && narrativeIndex < scene.narrative.length - 1) {
@@ -109,6 +139,14 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
     const lockStatus = isChoiceLocked(choice, state.player.stats);
     if (lockStatus.locked) return;
 
+    audioService.playSfx('choice');
+
+    if (choice.combat) {
+      audioService.playSfx('sword');
+    } else if (choice.morality === 'evil' || choice.morality === 'dark') {
+      audioService.playSfx('spell');
+    }
+
     setSelectedChoice(choice);
     if (choice.consequence) {
       setConsequenceText(choice.consequence);
@@ -118,6 +156,7 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
   };
 
   const proceedWithChoice = (choice: Choice) => {
+    audioService.playSfx('transition');
     setIsTransitioning(true);
     setTimeout(() => {
       if (choice.nextScene === 'restart') {
@@ -353,6 +392,23 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
             <span className="text-xs font-sans tracking-wider text-muted-foreground group-hover:text-foreground uppercase">Inventory</span>
           </div>
           <span className="text-xs text-muted-foreground/60 font-sans">{state.player.inventory.length}</span>
+        </button>
+
+        {/* Audio mute toggle */}
+        <button
+          data-testid="button-audio-toggle"
+          onClick={() => setIsMuted(audioService.toggleMute())}
+          className="w-full card-parchment p-3 flex items-center justify-between hover:border-muted/50 transition-colors group"
+        >
+          <div className="flex items-center gap-2">
+            {isMuted
+              ? <VolumeX className="w-3.5 h-3.5 text-muted-foreground group-hover:text-foreground" />
+              : <Volume2 className="w-3.5 h-3.5 text-foreground" />
+            }
+            <span className="text-xs font-sans tracking-wider text-muted-foreground group-hover:text-foreground uppercase">
+              {isMuted ? 'Unmute' : 'Sound On'}
+            </span>
+          </div>
         </button>
 
         {/* Play Games sign-in */}

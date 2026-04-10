@@ -41,6 +41,7 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
   - Kill count, betrayal tracking, soul tracking
   - Auto-save to localStorage with continue support
   - Morality system (Evil, Dark, Neutral, Ambiguous choices)
+  - Procedural audio system: ambient drones per mood (9 moods), SFX (choice click, scene transition, crow, heartbeat, thunder, sword, spell), crossfade between scenes, mute toggle with localStorage persistence
   - Cinematic UI: dark gothic fonts (Cinzel, IM Fell English), atmospheric backgrounds, scanlines effect
 - **Key files**:
   - `src/game/types.ts` — all TypeScript types
@@ -50,6 +51,7 @@ See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and pa
   - `src/pages/TitleScreen.tsx` — animated title screen
   - `src/pages/CharacterCreation.tsx` — 3-step character creation
   - `src/pages/GameScreen.tsx` — main gameplay screen with sidebar stats
+  - `src/services/audioService.ts` — procedural Web Audio API ambient + SFX engine
 
 ### API Server (`artifacts/api-server`)
 - **Type**: Express 5 API server
