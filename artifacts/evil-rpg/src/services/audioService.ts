@@ -4,25 +4,25 @@ type BackgroundMood = 'tomb' | 'throne' | 'forest' | 'village' | 'dungeon' | 'ri
 type SfxType = 'choice' | 'transition' | 'crow' | 'heartbeat' | 'thunder' | 'sword' | 'spell';
 
 const AMBIENT_FILES: Record<BackgroundMood, string> = {
-  tomb: '/audio/ambient-tomb.wav',
-  throne: '/audio/ambient-throne.wav',
-  forest: '/audio/ambient-forest.wav',
-  village: '/audio/ambient-village.wav',
-  dungeon: '/audio/ambient-dungeon.wav',
-  ritual: '/audio/ambient-ritual.wav',
-  battlefield: '/audio/ambient-battlefield.wav',
-  tower: '/audio/ambient-tower.wav',
-  abyss: '/audio/ambient-abyss.wav',
+  tomb: '/audio/ambient-tomb.mp3',
+  throne: '/audio/ambient-throne.mp3',
+  forest: '/audio/ambient-forest.mp3',
+  village: '/audio/ambient-village.mp3',
+  dungeon: '/audio/ambient-dungeon.mp3',
+  ritual: '/audio/ambient-ritual.mp3',
+  battlefield: '/audio/ambient-battlefield.mp3',
+  tower: '/audio/ambient-tower.mp3',
+  abyss: '/audio/ambient-abyss.mp3',
 };
 
 const SFX_FILES: Record<SfxType, string> = {
-  choice: '/audio/sfx-click.wav',
-  transition: '/audio/sfx-transition.wav',
-  crow: '/audio/sfx-crow.wav',
-  heartbeat: '/audio/sfx-heartbeat.wav',
-  thunder: '/audio/sfx-thunder.wav',
-  sword: '/audio/sfx-sword.wav',
-  spell: '/audio/sfx-spell.wav',
+  choice: '/audio/sfx-click.mp3',
+  transition: '/audio/sfx-transition.mp3',
+  crow: '/audio/sfx-crow.mp3',
+  heartbeat: '/audio/sfx-heartbeat.mp3',
+  thunder: '/audio/sfx-thunder.mp3',
+  sword: '/audio/sfx-sword.mp3',
+  spell: '/audio/sfx-spell.mp3',
 };
 
 const AMBIENT_VOLUME: Record<BackgroundMood, number> = {
@@ -60,11 +60,13 @@ function resolveAudioPath(path: string): string {
 
 class AudioService {
   private currentMood: BackgroundMood | null = null;
+  private pendingMood: BackgroundMood | null = null;
   private currentAmbient: Howl | null = null;
   private currentAmbientId: number | null = null;
   private sfxCache: Partial<Record<SfxType, Howl>> = {};
   private muted = false;
   private initialized = false;
+  private hasInteracted = false;
   private heartbeatInterval: ReturnType<typeof setInterval> | null = null;
   private interactionHandler: (() => void) | null = null;
 
@@ -78,15 +80,17 @@ class AudioService {
 
     this.preloadSfx();
 
-    if (this.muted) return;
-
     const handler = () => {
+      this.hasInteracted = true;
       this.removeInteractionListeners();
+      if (this.pendingMood && !this.muted) {
+        this.playAmbient(this.pendingMood);
+      }
     };
     this.interactionHandler = handler;
-    document.addEventListener('click', handler, { once: true });
-    document.addEventListener('touchstart', handler, { once: true });
-    document.addEventListener('keydown', handler, { once: true });
+    document.addEventListener('click', handler);
+    document.addEventListener('touchstart', handler);
+    document.addEventListener('keydown', handler);
   }
 
   private removeInteractionListeners(): void {
@@ -144,14 +148,20 @@ class AudioService {
   playAmbient(mood: BackgroundMood): void {
     if (mood === this.currentMood) return;
 
+    this.pendingMood = mood;
+
+    if (!this.hasInteracted) return;
+
     const previousAmbient = this.currentAmbient;
     const previousId = this.currentAmbientId;
 
     if (previousAmbient && previousId !== null) {
       previousAmbient.fade(previousAmbient.volume(), 0, CROSSFADE_MS, previousId);
+      const ref = previousAmbient;
+      const refId = previousId;
       setTimeout(() => {
-        previousAmbient.stop(previousId);
-        previousAmbient.unload();
+        ref.stop(refId);
+        ref.unload();
       }, CROSSFADE_MS + 100);
     }
 
@@ -193,7 +203,7 @@ class AudioService {
   }
 
   playSfx(type: SfxType): void {
-    if (this.muted) return;
+    if (this.muted || !this.hasInteracted) return;
     const howl = this.sfxCache[type];
     if (howl) {
       howl.play();
@@ -226,6 +236,7 @@ class AudioService {
     this.sfxCache = {};
 
     this.initialized = false;
+    this.hasInteracted = false;
   }
 }
 
