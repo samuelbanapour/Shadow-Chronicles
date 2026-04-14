@@ -1,11 +1,15 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "app.replit.shadow_chronicle__samuelb100.twa",
       "sha256_cert_fingerprints": [
-        "22:79:35:CF:41:C9:AC:D0:64:68:91:F8:DC:AF:B4:AB:A2:4E:F1:C1:9E:B8:02:41:13:49:DE:56:05:19:A1:88"
+        "22:79:35:CF:41:C9:AC:D0:64:68:91:F8:DC:AF:B4:AB:A2:4E:F1:C1:9E:B8:02:41:13:49:DE:56:05:19:A1:88",
+        "3A:3A:7B:13:13:9A:98:9A:EB:FE:F5:1E:6C:01:87:3F:1F:57:AB:ED:7B:E2:DC:0E:FA:5B:07:F6:5D:45:D3:D9"
       ]
     }
   }

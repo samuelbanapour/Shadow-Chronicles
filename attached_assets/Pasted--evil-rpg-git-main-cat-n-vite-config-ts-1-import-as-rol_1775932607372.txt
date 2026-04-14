@@ -1,0 +1,113 @@
+  evil-rpg git:(main) ✗ cat -n vite.config.ts
+     1	import * as rollup from "rollup";
+     2	import { defineConfig } from "vite";
+     3	import react from "@vitejs/plugin-react";
+     4	import path from "path";
+     5	import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+     6	import { VitePWA } from "vite-plugin-pwa";
+     7	
+     8	const port = Number(process.env.PORT ?? 3000);
+     9	const basePath = process.env.BASE_PATH ?? '/';
+    10	
+    11	export default defineConfig({
+    12	  base: basePath,
+    13	  plugins: [
+    14	    react(),
+    15	    runtimeErrorOverlay(),
+    16	    ...(process.env.PORT ? [VitePWA({
+    17	      registerType: "autoUpdate",
+    18	      includeAssets: ["favicon.ico", "icons/*.png", "icons/*.svg"],
+    19	      manifest: false,
+    20	      workbox: {
+    21	        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
+    22	        runtimeCaching: [
+    23	          {
+    24	            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+    25	            handler: "CacheFirst",
+    26	            options: {
+    27	              cacheName: "google-fonts-cache",
+    28	              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
+    29	              cacheableResponse: { statuses: [0, 200] },
+    30	            },
+    31	          },
+    32	          {
+    33	            urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
+    34	            handler: "CacheFirst",
+    35	            options: {
+    36	              cacheName: "gstatic-fonts-cache",
+    37	              expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 * 365 },
+    38	              cacheableResponse: { statuses: [0, 200] },
+    39	            },
+    40	          },
+    41	        ],
+    42	      },
+    43	      devOptions: { enabled: false },
+    44	    })] : []),
+    45	  ],
+    46	  resolve: {
+    47	    alias: {
+    48	      "@": path.resolve(import.meta.dirname, "src"),
+    49	    },
+    50	    dedupe: ["react", "react-dom"],
+    51	  },
+    52	  server: {
+    53	    port,
+    54	    host: "0.0.0.0",
+    55	    allowedHosts: true,
+    56	  },
+    57	  preview: {
+    58	    port,
+    59	    host: "0.0.0.0",
+    60	    allowedHosts: true,
+    61	  },
+    62	  build: {
+    63	    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    64	    emptyOutDir: true,
+    65	  },
+    66	});
+    67	
+    68	{  
+    69	  css: {
+    70	    transformer: "postcss",
+    71	  optimizeDeps: 
+    72	    exclude: ["lightningcss"],
+    73	};
+    74	
+    75	// ⭐ Prevent Vite from loading LightningCSS during SSR
+    76	  ssr: {
+    77	    noExternal: ["lightningcss"],
+    78	},
+    79	  
+    80	  resolve: {
+    81	    alias: {
+    82	      "@": path.resolve(import.meta.dirname, "src"),
+    83	      "@assets": path.resolve(import.meta.dirname, "..", "..", "attached_assets"),
+    84	    },
+    85	    dedupe: ["react", "react-dom"],
+    86	  },
+    87	  root: path.resolve(import.meta.dirname),
+    88	  build: {
+    89	  outDir: path.resolve(import.meta.dirname, "dist/public"),
+    90	  emptyOutDir: true,
+    91	
+    92	  // ⭐ Add this section to force JS Rollup instead of native binary
+    93	  rollupOptions: {
+    94	    // @ts-ignore
+    95	    rollup,
+    96	  },
+    97	},
+    98	  server: {
+    99	    port,
+   100	    host: "0.0.0.0",
+   101	    allowedHosts: true,
+   102	    fs: {
+   103	      strict: true,
+   104	      deny: ["**/.*"],
+   105	    },
+   106	  },
+   107	  preview: {
+   108	    port,
+   109	    host: "0.0.0.0",
+   110	    allowedHosts: true,
+   111	  },
+   112	});

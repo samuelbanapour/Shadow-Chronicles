@@ -1,0 +1,31 @@
+➜  Shadow-Chronicle git:(main) ✗ cd artifacts/evil-rpg/
+➜  evil-rpg git:(main) ✗ nano vite.config.ts
+➜  evil-rpg git:(main) ✗ pnpm install          
+pnpm --filter @workspace/evil-rpg run build
+Scope: all 9 workspace projects
+../.. preinstall$ sh -c 'rm -f package-lock.json yarn.lock; case …
+└─ Done in 25ms
+Done in 1.2s using pnpm v10.33.0
+
+> @workspace/evil-rpg@0.0.0 build /Users/sammybanapour/dark-sovereign-android/Shadow-Chronicle/artifacts/evil-rpg
+> vite build --config vite.config.ts
+
+vite v5.4.21 building for production...
+Unknown input options: rollup. Allowed options: cache, context, experimentalCacheExpiry, experimentalLogSideEffects, external, fs, input, jsx, logLevel, makeAbsoluteExternalsRelative, maxParallelFileOps, moduleContext, onLog, onwarn, perf, plugins, preserveEntrySignatures, preserveSymlinks, shimMissingExports, strictDeprecations, treeshake, watch
+✓ 1785 modules transformed.
+x Build failed in 1.38s
+error during build:
+[vite-plugin-pwa:build] [plugin vite-plugin-pwa:build] src/index.css (534:0): There was an error during the build:
+  [postcss] /Users/sammybanapour/dark-sovereign-android/Shadow-Chronicle/node_modules/.pnpm/tailwindcss@4.2.2/node_modules/tailwindcss/index.css:534:1: `@layer base` is used but no matching `@tailwind base` directive is present.
+Additionally, handling the error in the 'buildEnd' hook caused the following error:
+  [postcss] /Users/sammybanapour/dark-sovereign-android/Shadow-Chronicle/node_modules/.pnpm/tailwindcss@4.2.2/node_modules/tailwindcss/index.css:534:1: `@layer base` is used but no matching `@tailwind base` directive is present.
+file: /Users/sammybanapour/dark-sovereign-android/Shadow-Chronicle/artifacts/evil-rpg/src/index.css:534:0
+    at getRollupError (file:///Users/sammybanapour/dark-sovereign-android/Shadow-Chronicle/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/parseAst.js:406:41)
+    at file:///Users/sammybanapour/dark-sovereign-android/Shadow-Chronicle/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/node-entry.js:23863:39
+    at async catchUnfinishedHookActions (file:///Users/sammybanapour/dark-sovereign-android/Shadow-Chronicle/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/node-entry.js:23321:16)
+    at async rollupInternal (file:///Users/sammybanapour/dark-sovereign-android/Shadow-Chronicle/node_modules/.pnpm/rollup@4.60.1/node_modules/rollup/dist/es/shared/node-entry.js:23846:5)
+    at async build (file:///Users/sammybanapour/dark-sovereign-android/Shadow-Chronicle/node_modules/.pnpm/vite@5.4.21_@types+node@25.5.2_lightningcss@1.32.0_terser@5.46.1/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:65709:14)
+    at async CAC.<anonymous> (file:///Users/sammybanapour/dark-sovereign-android/Shadow-Chronicle/node_modules/.pnpm/vite@5.4.21_@types+node@25.5.2_lightningcss@1.32.0_terser@5.46.1/node_modules/vite/dist/node/cli.js:829:5)
+ ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL  @workspace/evil-rpg@0.0.0 build: `vite build --config vite.config.ts`
+Exit status 1
+➜  evil-rpg git:(main) ✗ 
