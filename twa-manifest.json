@@ -29,7 +29,8 @@
   "features": {
     "playBilling": {
       "enabled": true
-    }
+    },
+    "includeDebugSymbols": false
   },
   "alphaDependencies": {
     "enabled": false
