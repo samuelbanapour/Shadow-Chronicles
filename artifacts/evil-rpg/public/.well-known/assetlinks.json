@@ -11,5 +11,18 @@
         "1A:BC:42:35:47:50:35:67:8A:FC:9B:3E:FF:B7:03:60:B9:96:64:D5:06:D4:99:26:B9:A5:68:51:EF:DD:C0:A7"
       ]
     }
+  },
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.replit.shadow_chronicle__samuelb100.twa",
+      "sha256_cert_fingerprints": [
+        "1A:BC:42:35:47:50:35:67:8A:FC:9B:3E:FF:B7:03:60:B9:96:64:D5:06:D4:99:26:B9:A5:68:51:EF:DD:C0:A7"
+      ]
+    }
   }
 ]
