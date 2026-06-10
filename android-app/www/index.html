@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Dark Sovereign RPG</title>
+    <style>
+      html, body {
+        margin: 0; height: 100%;
+        background: #0A0203; color: #7a1f1f;
+        font-family: Georgia, 'Times New Roman', serif;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .msg { text-align: center; opacity: 0.85; }
+      .spin {
+        margin: 0 auto 16px; width: 28px; height: 28px;
+        border: 3px solid #3a0d0d; border-top-color: #b03030;
+        border-radius: 50%; animation: s 1s linear infinite;
+      }
+      @keyframes s { to { transform: rotate(360deg); } }
+    </style>
+  </head>
+  <body>
+    <!-- Fallback shown only if the live site can't be reached. -->
+    <div class="msg">
+      <div class="spin"></div>
+      Summoning the Obsidian Crown…
+    </div>
+  </body>
+</html>

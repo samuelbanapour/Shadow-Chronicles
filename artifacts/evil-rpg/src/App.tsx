@@ -7,6 +7,7 @@ import FeedbackModal from '@/components/FeedbackModal';
 import { createInitialState, loadGame, clearSave } from '@/game/engine';
 import type { GameState } from '@/game/types';
 import { playGames } from '@/services/playGames';
+import { showInterstitial } from '@/services/ads';
 import { MessageSquare } from 'lucide-react';
 
 const queryClient = new QueryClient();
@@ -50,6 +51,8 @@ export default function App() {
 
   const handleGameEnd = () => {
     setView('title');
+    // Natural break: show a full-screen ad over the title screen (native app only).
+    void showInterstitial();
   };
 
   const handleRestart = () => {
