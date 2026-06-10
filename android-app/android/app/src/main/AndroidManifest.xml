@@ -34,13 +34,10 @@
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
 
-        <!-- Google AdMob App ID.
-             This is Google's OFFICIAL TEST App ID — safe to ship while testing.
-             Replace with your real AdMob App ID (ca-app-pub-XXXXXXXXXXXXXXXX~YYYYYYYYYY)
-             from https://apps.admob.com before you publish for real revenue. -->
+        <!-- Google AdMob App ID for "Dark Sovereign RPG" (real, production). -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713" />
+            android:value="ca-app-pub-2118348297034183~1908704966" />
     </application>
 
     <!-- Permissions -->

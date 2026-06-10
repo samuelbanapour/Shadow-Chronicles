@@ -14,9 +14,9 @@ android {
         applicationId "app.replit.shadow_chronicle__samuelb100.twa"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        // versionCode must increase on every Play upload. Old TWA was 2; 3-5 already used.
-        versionCode 6
-        versionName "2.1.1"
+        // versionCode must increase on every Play upload. Old TWA was 2; 3-6 used. 7 = real ads.
+        versionCode 7
+        versionName "2.2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.

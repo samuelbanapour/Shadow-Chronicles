@@ -16,8 +16,8 @@ public class MainActivity extends BridgeActivity {
      * The script waits for the Capacitor AdMob bridge, then shows an adaptive banner
      * pinned to the bottom of the screen. A window flag keeps it from running twice.
      *
-     * Uses Google's OFFICIAL TEST banner unit (ca-app-pub-3940256099942544/6300978111).
-     * Replace it with your real banner ad-unit ID before publishing for real revenue.
+     * Uses the real "Game Banner" ad unit (ca-app-pub-2118348297034183/6678354919) with
+     * test mode OFF — this build serves live ads, so publish it to PRODUCTION only.
      */
     private static final String ADMOB_BOOTSTRAP_JS =
         "(function(){" +
@@ -31,14 +31,14 @@ public class MainActivity extends BridgeActivity {
         "      return;" +
         "    }" +
         "    var AdMob = C.Plugins.AdMob;" +
-        "    AdMob.initialize({ initializeForTesting: true })" +
+        "    AdMob.initialize({})" +
         "      .then(function(){" +
         "        return AdMob.showBanner({" +
-        "          adId: 'ca-app-pub-3940256099942544/6300978111'," +
+        "          adId: 'ca-app-pub-2118348297034183/6678354919'," +
         "          adSize: 'ADAPTIVE_BANNER'," +
         "          position: 'BOTTOM_CENTER'," +
         "          margin: 0," +
-        "          isTesting: true" +
+        "          isTesting: false" +
         "        });" +
         "      })" +
         "      .catch(function(e){" +
