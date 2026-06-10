@@ -14,6 +14,7 @@ import {
 } from '@/game/engine';
 import { playGames } from '@/services/playGames';
 import { audioService } from '@/services/audioService';
+import { showRewarded, adsEnabled } from '@/services/ads';
 
 interface GameScreenProps {
   state: GameState;
@@ -67,6 +68,8 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
   const [achToast, setAchToast] = useState<string | null>(null);
   const [pgsSignedIn, setPgsSignedIn] = useState(false);
   const [isMuted, setIsMuted] = useState(audioService.isMuted());
+  const [pactScene, setPactScene] = useState<string | null>(null);
+  const [pactPending, setPactPending] = useState(false);
   const narrativeRef = useRef<HTMLDivElement>(null);
 
   const scene = getCurrentScene(state);
@@ -138,6 +141,32 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
       </div>
     );
   }
+
+  const handleDarkPact = async () => {
+    if (pactPending) return;
+    setPactPending(true);
+    try {
+      const earned = await showRewarded();
+      if (earned) {
+        setPactScene(state.currentScene);
+        const stats = state.player.stats;
+        onStateChange({
+          ...state,
+          player: {
+            ...state.player,
+            stats: {
+              ...stats,
+              gold: stats.gold + 75,
+              health: Math.min(stats.maxHealth, stats.health + 25),
+            },
+          },
+        });
+        audioService.playSfx('spell');
+      }
+    } finally {
+      setPactPending(false);
+    }
+  };
 
   const handleChoiceClick = (choice: Choice) => {
     const lockStatus = isChoiceLocked(choice, state.player.stats, state.player.class, state.player.betrayals);
@@ -606,6 +635,18 @@ export default function GameScreen({ state, onStateChange, onGameEnd, onRestart 
                 </motion.button>
               );
             })}
+
+            {!isEnding && adsEnabled && pactScene !== state.currentScene && (
+              <button
+                data-testid="button-dark-pact"
+                onClick={handleDarkPact}
+                disabled={pactPending}
+                className="w-full mt-4 py-3 border border-blood/40 bg-blood/5 hover:bg-blood/15 text-blood/90 text-[0.65rem] font-sans tracking-widest uppercase flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+              >
+                <Skull className="w-3.5 h-3.5" />
+                {pactPending ? 'The Void listens…' : 'Dark Pact · watch an ad for 75 gold + vitality'}
+              </button>
+            )}
           </motion.div>
         )}
       </div>
