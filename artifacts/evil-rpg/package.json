@@ -78,6 +78,8 @@
     "zod": "catalog:"
   },
   "dependencies": {
+    "@capacitor-community/admob": "^8.0.0",
+    "@capacitor/core": "^8.4.0",
     "howler": "^2.2.4"
   }
 }

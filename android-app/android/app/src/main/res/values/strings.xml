@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Dark Sov</string>
+    <string name="title_activity_main">Dark Sov</string>
+    <string name="package_name">app.replit.shadow_chronicle__samuelb100.twa</string>
+    <string name="custom_url_scheme">app.replit.shadow_chronicle__samuelb100.twa</string>
+</resources>

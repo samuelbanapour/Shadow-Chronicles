@@ -47,3 +47,16 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Android signing secrets — NEVER commit these
+*.keystore
+*.jks
+*.pem
+keystore.properties
+local.properties
+
+# Capacitor / Android build artifacts (android-app/)
+android-app/node_modules/
+android-app/**/build/
+android-app/**/.gradle/
+android-app/**/captures/
