@@ -218,6 +218,12 @@ importers:
 
   artifacts/evil-rpg:
     dependencies:
+      '@capacitor-community/admob':
+        specifier: ^8.0.0
+        version: 8.0.0
+      '@capacitor/core':
+        specifier: ^8.4.0
+        version: 8.4.0
       howler:
         specifier: ^2.2.4
         version: 2.2.4
@@ -1171,6 +1177,13 @@ packages:
     resolution: {integrity: sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==}
     engines: {node: '>=6.9.0'}
 
+  '@capacitor-community/admob@8.0.0':
+    resolution: {integrity: sha512-+ZIq+UtcNvTMFwjvuhOuGvCjwK2Wu36lTIl9o1/CEjfp2Aj3m4b9zQGx0vXrERYqQmJp/Ven7ee3gGuh2Ym8nA==}
+    engines: {node: '>=22.0.0'}
+
+  '@capacitor/core@8.4.0':
+    resolution: {integrity: sha512-LrS1xPIrqLtJABBIPDGXxxKmI9OyesrzWw8DiHbxhSC9JoiLUleUAJlX1a0LWIVLRbuY4Szgf9huFeRqYH2SAQ==}
+
   '@commander-js/extra-typings@14.0.0':
     resolution: {integrity: sha512-hIn0ncNaJRLkZrxBIp5AsW/eXEHNKYQBh0aPdoUqNgD+Io3NIykQqpKFyKcuasZhicGaEZJX/JBSIkZ4e5x8Dg==}
     peerDependencies:
@@ -1942,6 +1955,11 @@ packages:
 
   '@radix-ui/rect@1.1.1':
     resolution: {integrity: sha512-HPwpGIzkl28mWyZqG52jiqDJ12waP11Pa1lGoiyUkIEuMLBP0oeK/C89esbXrxsky5we7dfd8U58nm0SgAWpVw==}
+
+  '@rdlabo/capacitor-docgen@0.4.1':
+    resolution: {integrity: sha512-zUB0lwha4Omqyr5URy/QaFjP6Gh2xxTKAFI0MClqrmUxQwmV8c84+wGvqAoWPCzg4jk1MsU6oiRVuTkUV7xseA==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
 
   '@replit/vite-plugin-cartographer@0.5.1':
     resolution: {integrity: sha512-KiaQMx4ssTM8hSjMFscyIV1PN1bRVCWCFqN3fXOfXa39uFFCKUaeL3VvH/sxuy7S7ET+MCFOt+J7lLtL56bRrA==}
@@ -2922,6 +2940,9 @@ packages:
   get-tsconfig@4.13.6:
     resolution: {integrity: sha512-shZT/QMiSHc/YBLxxOkMtgSid5HFoauqCE3/exfsEcwg1WkeqjG+V40yBbBrsD+jW2HDXcs28xOfcbm2jI8Ddw==}
 
+  github-slugger@1.5.0:
+    resolution: {integrity: sha512-wIh+gKBI9Nshz2o46B0B3f5k/W+WI9ZAv6y5Dn5WJ5SK1t0TnDimB4WE5rmTD05ZAIn8HALCZVmCsvj0w0v0lw==}
+
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
     engines: {node: '>= 6'}
@@ -3686,6 +3707,7 @@ packages:
   recharts@2.15.4:
     resolution: {integrity: sha512-UT/q6fwS3c1dHbXv2uFgYJ9BMFHu3fwnd7AYZaEQhXuYQ4hgsxLvsUXzGdKeZrW5xopzDCvuA2N41WJ88I7zIw==}
     engines: {node: '>=14'}
+    deprecated: 1.x and 2.x branches are no longer active. Bump to Recharts v3 to receive latest features and bugfixes. See https://github.com/recharts/recharts/wiki/3.0-migration-guide
     peerDependencies:
       react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -4047,6 +4069,11 @@ packages:
     hasBin: true
     peerDependencies:
       typescript: 5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x || 5.5.x || 5.6.x || 5.7.x || 5.8.x || 5.9.x
+
+  typescript@4.2.4:
+    resolution: {integrity: sha512-V+evlYHZnQkaz8TRBuxTA92yZBPotr5H+WhQ7bD3hZUndx5tGOa1fuCgeSjxAzM1RiN5IzvadIXTVefuuwZCRg==}
+    engines: {node: '>=4.2.0'}
+    hasBin: true
 
   typescript@5.9.3:
     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
@@ -4983,6 +5010,15 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
 
+  '@capacitor-community/admob@8.0.0':
+    dependencies:
+      '@capacitor/core': 8.4.0
+      '@rdlabo/capacitor-docgen': 0.4.1
+
+  '@capacitor/core@8.4.0':
+    dependencies:
+      tslib: 2.8.1
+
   '@commander-js/extra-typings@14.0.0(commander@14.0.3)':
     dependencies:
       commander: 14.0.3
@@ -5865,6 +5901,13 @@ snapshots:
       '@types/react-dom': 19.2.3(@types/react@19.2.14)
 
   '@radix-ui/rect@1.1.1': {}
+
+  '@rdlabo/capacitor-docgen@0.4.1':
+    dependencies:
+      colorette: 2.0.20
+      github-slugger: 1.5.0
+      minimist: 1.2.8
+      typescript: 4.2.4
 
   '@replit/vite-plugin-cartographer@0.5.1':
     dependencies:
@@ -6865,6 +6908,8 @@ snapshots:
   get-tsconfig@4.13.6:
     dependencies:
       resolve-pkg-maps: 1.0.0
+
+  github-slugger@1.5.0: {}
 
   glob-parent@5.1.2:
     dependencies:
@@ -8025,6 +8070,8 @@ snapshots:
       minimatch: 9.0.9
       typescript: 5.9.3
       yaml: 2.8.2
+
+  typescript@4.2.4: {}
 
   typescript@5.9.3: {}
 
