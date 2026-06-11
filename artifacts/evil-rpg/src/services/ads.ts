@@ -15,7 +15,8 @@
 import { Capacitor } from '@capacitor/core';
 import { AdMob, type AdOptions, type RewardAdOptions } from '@capacitor-community/admob';
 
-const INTERSTITIAL_AD_ID = 'ca-app-pub-2118348297034183/7265849130'; // real: "Between Chapters"
+// TEST MODE for closed testing. Real interstitial unit is ca-app-pub-2118348297034183/7265849130.
+const INTERSTITIAL_AD_ID = 'ca-app-pub-3940256099942544/1033173712'; // Google test interstitial
 const REWARDED_AD_ID = 'ca-app-pub-3940256099942544/5224354917'; // TODO: Google test unit — replace with a real Rewarded unit
 
 const isNative = Capacitor.isNativePlatform();
@@ -24,7 +25,7 @@ let initPromise: Promise<void> | null = null;
 function ensureInit(): Promise<void> {
   if (!isNative) return Promise.resolve();
   if (!initPromise) {
-    initPromise = AdMob.initialize({}).catch((err) => {
+    initPromise = AdMob.initialize({ initializeForTesting: true }).catch((err) => {
       // Reset so a later call can retry.
       initPromise = null;
       throw err;
@@ -41,7 +42,7 @@ export async function showInterstitial(): Promise<void> {
   if (!isNative) return;
   try {
     await ensureInit();
-    const options: AdOptions = { adId: INTERSTITIAL_AD_ID, isTesting: false };
+    const options: AdOptions = { adId: INTERSTITIAL_AD_ID, isTesting: true };
     await AdMob.prepareInterstitial(options);
     await AdMob.showInterstitial();
   } catch (err) {
