@@ -8,6 +8,7 @@ import { createInitialState, loadGame, clearSave } from '@/game/engine';
 import type { GameState } from '@/game/types';
 import { playGames } from '@/services/playGames';
 import { showInterstitial } from '@/services/ads';
+import TributeButton from '@/components/TributeButton';
 import { MessageSquare } from 'lucide-react';
 
 const queryClient = new QueryClient();
@@ -101,6 +102,9 @@ export default function App() {
           chapter={gameState?.chapter}
           scene={gameState?.currentScene}
         />
+
+        {/* Amazon-only "Tribute to the Crown" tip (hidden on Play / web). */}
+        <TributeButton />
       </div>
     </QueryClientProvider>
   );
