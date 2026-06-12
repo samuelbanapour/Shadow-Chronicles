@@ -179,7 +179,7 @@ export default function TitleScreen({ onNewGame, onContinue }: TitleScreenProps)
       {/* Feedback modal */}
       <AnimatePresence>
         {showFeedback && (
-          <FeedbackModal onClose={() => setShowFeedback(false)} />
+          <FeedbackModal open={showFeedback} onClose={() => setShowFeedback(false)} />
         )}
       </AnimatePresence>
 
