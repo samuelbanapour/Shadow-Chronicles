@@ -8,6 +8,8 @@ interface FeedbackModalProps {
   onClose: () => void;
   playerName?: string;
   playerClass?: string;
+  chapter?: number;
+  scene?: string;
 }
 
 const RATINGS = [
